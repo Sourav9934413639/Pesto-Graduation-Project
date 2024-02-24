@@ -1,6 +1,6 @@
 
 import React, { useContext, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 import {
@@ -17,7 +17,8 @@ import SignInImage from '../Images/LoginImg.png';
 
 const SignInForm = () => {
     const {isAuthenticated,setIsAuthenticated,loading,setLoading}=useContext(Context);
-
+    const navigate = useNavigate();
+    const location = useLocation();
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -46,7 +47,11 @@ const SignInForm = () => {
       toast.success("Logged in successfully...");
       setIsAuthenticated(true);
       setLoading(false);
-
+      if (location.state && location.state.fromSummary) {
+        navigate('/summary');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.log(error)
       toast.error(error.response.data.message);

@@ -22,6 +22,15 @@ const serviceSchema=new mongoose.Schema({
         type:Number,
         required:true
     },
-    ServiceDescription:mongoose.Schema.Types.Mixed
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true
+      },
+    ServiceDescription:mongoose.Schema.Types.Mixed,
+    createdAt: {
+        type: Date,
+        default: Date.now,
+      }
 })
-export const Service=mongoose.model("service",serviceSchema)
+export const Services=mongoose.model("services",serviceSchema)

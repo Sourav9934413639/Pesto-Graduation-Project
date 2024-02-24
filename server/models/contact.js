@@ -20,6 +20,11 @@ const contactSchema=new mongoose.Schema({
           message: 'Mobile number must be a 10-digit number.',
         },
       },
+      user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        required:true
+      },
     message:{
         type:String,
         required:true,

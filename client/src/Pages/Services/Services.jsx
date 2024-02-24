@@ -2,13 +2,9 @@ import React from 'react';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
-import { useDispatch} from 'react-redux';
+
 
 const ServicesCard = ({ title, imageUrl }) => {
-  //const [serviceInfo,setServiceInfo]=useState({});
-  //const obj=useSelector(state=>state.serviceReducer);
-
-  const dispatch=useDispatch();
   const history = useNavigate();
   const cardStyles = {
     maxWidth: 300,
@@ -18,21 +14,21 @@ const ServicesCard = ({ title, imageUrl }) => {
     position: 'relative',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     transition: 'transform 4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease-in-out',
-    margin: '0 1rem 2rem', // Margin between cards
+    margin: '0 1rem 2rem',
     '&:hover': {
       transform: 'scale(1.05)',
-      backgroundColor: 'rgba(0, 0, 0, 0.1)', // Background color on hover
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
     },
   };
 
   const imageStyles = {
     width: '100%',
-    height: '100%', // Image size matches card size
+    height: '100%',
     objectFit: 'cover',
-    borderRadius: '16px', // Border radius same as card
+    borderRadius: '16px',
     transition: 'transform 4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
     '&:hover': {
-      transform: 'scale(1.1)', // Increase size on hover
+      transform: 'scale(1.1)',
     },
   };
 
@@ -58,7 +54,7 @@ const ServicesCard = ({ title, imageUrl }) => {
     console.log('Button clicked. Storing title in session. Title:', title);
     sessionStorage.setItem('selectedServiceTitle', title);
     localStorage.setItem('serviceInfo', JSON.stringify([{title}]));
-    dispatch({type:"addTitle",payload:{key:"Title",value:title}})
+    
     history(`/Services/${encodeURIComponent(title)}`);
   };
   
@@ -91,7 +87,6 @@ const ServicesPage = () => {
       title: 'Nurse',
       imageUrl: 'https://plus.unsplash.com/premium_photo-1676325101995-cdfc26d820bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNhbHxlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
     },
-    // Add more services as needed
   ];
 
   const containerStyles = {
@@ -99,8 +94,8 @@ const ServicesPage = () => {
     margin: '0 auto',
     padding: '2rem',
     display: 'flex',
-    flexWrap: 'wrap', // Allow cards to wrap to the next row
-    justifyContent: 'center', // Center the cards horizontally
+    flexWrap: 'wrap', 
+    justifyContent: 'center',
   };
   const headingStyles = {
     fontSize: '2rem',

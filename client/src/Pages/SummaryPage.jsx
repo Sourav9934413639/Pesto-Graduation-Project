@@ -1,22 +1,37 @@
 
 import { Box, Button, Container, CssBaseline, Divider, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import checkoutHandler from '../Components/Checkout';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+
+import { Context } from '../index';
+import { useNavigate } from 'react-router-dom';
+
+
+
 const SummaryPage = () => {
   const summary = useSelector(state => state.serviceReducer);
-  console.log(summary);
+  const navigate = useNavigate();
+  const {isAuthenticated,loading,setLoading}=useContext(Context);
   const handleCheckout = async() => {
     try {
-      const {data}=await axios.post("http://localhost:4000/api/v1/service",summary,{withCredentials:true})
+      if (!isAuthenticated) {
+        toast.error("Login first to avail your service and make payment");
+        navigate('/login', { state: { fromSummary: true } });
+        return;
+      }
+      setLoading(true);
+      const {data}=await axios.post("http://localhost:4000/api/v1/services",summary,{withCredentials:true})
       console.log(data)
       toast.success(data.message);
       checkoutHandler(summary.TotalPrice);
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error("Something went wrong! Try again");
+    }finally{
+      setLoading(false)
     }
     
     
@@ -28,13 +43,21 @@ const SummaryPage = () => {
       <Box textAlign="center" boxShadow={3} p={3} borderRadius={4} bgcolor="white">
         <Stack spacing={2}>
           <Typography variant="h5">Service Details</Typography>
-          <Typography variant="body1">Name of service: {summary.Title}</Typography>
-          <Typography variant="body1">Your location: {summary.Location}</Typography>
-          <Typography variant="body1">Your preference for gender of service provider: {summary.Gender}</Typography>
-          {summary.addOnObj && (Object.keys(summary.addOnObj).map((key) => (
+          <Typography variant="body1"><strong>Name of service:</strong> {summary.Title}</Typography>
+          <Typography variant="body1"><strong>Your location:</strong> {summary.Location}</Typography>
+          <Typography variant="body1"><strong>Your preference for gender of service provider</strong>: {summary.Gender}</Typography>
+          {(summary.basicPay && Object.keys(summary.basicPay).length !== 0) && (Object.keys(summary.basicPay).map((key)=>(
+             <Stack key={key} direction="row" justifyContent="center" alignItems="center" mt={2}>
+             <Typography variant="body1" fontWeight="bold" mr={1}>{key}:</Typography>
+             <Typography variant="body1">₹{summary.basicPay[key]}/-</Typography>
+           </Stack>
+          )))}
+
+          
+          {Object.keys(summary.addOns).length!==0 && (Object.keys(summary.addOns).map((key) => (
             <Stack key={key} direction="row" justifyContent="center" alignItems="center" mt={2}>
               <Typography variant="body1" fontWeight="bold" mr={1}>{key}:</Typography>
-              <Typography variant="body1">₹{summary.addOnObj[key]}/-</Typography>
+              <Typography variant="body1">₹{summary.addOns[key]}/-</Typography>
             </Stack>
           ))
           )}
@@ -60,7 +83,7 @@ const SummaryPage = () => {
         </Box>
       </Box>
       <Box m={4} textAlign="center">
-        <Button variant="contained" color="primary" onClick={handleCheckout}>
+        <Button variant="contained" color="primary" onClick={handleCheckout} disabled={loading}>
           Proceed to Checkout
         </Button>
       </Box>

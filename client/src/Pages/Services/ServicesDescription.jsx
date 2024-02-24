@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Grid, Box, Typography, Card, CardMedia, Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 const helperData = [
   {
     image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -27,23 +28,24 @@ const helperData = [
     description: 'Book a professional nurse for your well beings',
     heading: 'Online Medical Care Service',
   },
-  // Add more objects as needed
 ];
 
 function ServicesDescription() {
   const navigate = useNavigate();
   const { title } = useParams();
-
+  const dispatch=useDispatch();
   const selectedService = helperData.find(service => service.title === title);
   
   if (!selectedService) {
     return <div>Service not found</div>;
   }
-
+  const handleBooking=()=>{
+    dispatch({type:"addTitleFromMenu",payload:{key:"Title",value:title}})
+    navigate('/CitySelection')
+  }
   return (
     <Container maxWidth="lg" style={{ marginTop: '1%', marginBottom: '1%' }}>
       <Grid container spacing={3}>
-        {/* Left Section */}
         <Grid item xs={12} md={6}>
           <Card sx={{ width: '100%', height: '100%', borderRadius: '8px' }}>
             <CardMedia
@@ -54,8 +56,6 @@ function ServicesDescription() {
             />
           </Card>
         </Grid>
-
-        {/* Right Section */}
         <Grid item xs={12} md={6}>
           <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100%" textAlign="center">
             <Typography variant="h4" style={{ fontWeight: 'bold' }}>{selectedService.heading}</Typography>
@@ -63,7 +63,7 @@ function ServicesDescription() {
             <Button
               variant="contained"
               sx={{ color: 'white', backgroundColor: 'black', width: '10rem', mt: '1rem' }}
-              onClick={() => navigate('/CitySelection')}
+              onClick={handleBooking}
             >
               Book Now
             </Button>

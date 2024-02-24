@@ -17,13 +17,13 @@ const PaymentPage = () => {
     flexDirection: 'column',
     alignItems: 'center',
     padding: 4,
-    backgroundColor: 'rgb(255, 251, 245)',
-    marginTop: 50,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    justifyContent:'center'
   };
 
   const buttonStyle = {
     margin: '20px 0',
-    backgroundColor: '#ffa726',
+    backgroundColor: '#000000',
     color: 'white',
   };
 

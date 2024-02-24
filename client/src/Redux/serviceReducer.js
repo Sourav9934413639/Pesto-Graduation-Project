@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit/dist";
 const initialState={};
 export const serviceReducer=createReducer(initialState,{
-  addTitle:(state,action)=>{
+  addTitleFromMenu:(state,action)=>{
     const {key,value}=action.payload;
     return {
         [key]:value
@@ -29,11 +29,20 @@ export const serviceReducer=createReducer(initialState,{
       basicPay
     }
   },
-  addAddOns:(state,action)=>{
-    const addOnObj=action.payload;
+  removeBasicPay: (state, action) => {
+    const toRemove = action.payload;
+    const newBasicPay = { ...state.basicPay };
+    delete newBasicPay[toRemove];
     return {
-        ...state,
-        addOnObj
+      ...state,
+      basicPay: newBasicPay
+    };
+  },
+  addOnsObj:(state,action)=>{
+    const addOns=action.payload;
+    return {
+      ...state,
+      addOns
     }
   },
   addOtherServiceOptions:(state,action)=>{
@@ -44,22 +53,5 @@ export const serviceReducer=createReducer(initialState,{
         obj
     }
   },
-  removeAddOns: (state, action) => {
-    const toRemove = action.payload;
-    const newAddOns = { ...state.addOns };
-    delete newAddOns[toRemove];
-    return {
-      ...state,
-      addOns: newAddOns
-    };
-  },
-  removeBasicPay: (state, action) => {
-    const toRemove = action.payload;
-    const newBasicPay = { ...state.basicPay };
-    delete newBasicPay[toRemove];
-    return {
-      ...state,
-      basicPay: newBasicPay
-    };
-  },
+ 
 })

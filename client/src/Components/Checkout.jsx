@@ -3,7 +3,7 @@ import logo from '../Images/Logo.png'
 const checkoutHandler=async(amount)=>{
     try {
       const {data:{key}}=await axios.get("http://localhost:4000/getKey");
-      const {data:{order}}=await axios.post("http://localhost:4000/api/v1/checkout",{amount})
+      const {data:{order}}=await axios.post("http://localhost:4000/api/v1/checkout",{amount},{withCredentials:true})
       var options = {
         key, // Enter the Key ID generated from the Dashboard
         amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

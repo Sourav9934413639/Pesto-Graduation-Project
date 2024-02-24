@@ -56,13 +56,13 @@ const ResetPassword = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: 'rgb(255, 251, 245)', 
+        backgroundColor: 'rgba(0,0,0,0.1)', 
       }}
     >
       <Avatar
         sx={{
           margin: 1,
-          backgroundColor: (theme) => theme.palette.warning.main, 
+          backgroundColor:"black", 
         }}
       >
         <LockOutlinedIcon />
@@ -106,7 +106,7 @@ const ResetPassword = () => {
           color="warning"
           sx={{
             marginY: 3,
-            backgroundColor: (theme) => theme.palette.warning.main, 
+            backgroundColor: "black", 
             transition:'all 0.5s ease-in-out'
           }}
           type='submit'

@@ -14,10 +14,11 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const combinedData = [
   {
-    title: "Cleaning",
+    title:"Cleaning",
     servicesInfo: {
       serviceData: {
         header: "Brooming, Mopping",
@@ -43,7 +44,7 @@ const combinedData = [
     },
   },
   {
-    title: "Cooking",
+    title:"Cooking",
     servicesInfo: {
       serviceData: {
         header: "Meal Preparation",
@@ -69,7 +70,7 @@ const combinedData = [
     },
   },
   {
-    title: "Nurse",
+    title:"Nurse",
     servicesInfo: {
       serviceData: {
         header: "For your health wellness",
@@ -95,7 +96,7 @@ const combinedData = [
     },
   },
   {
-    title: "Nanny",
+    title:"Nanny",
     servicesInfo: {
       serviceData: {
         header: "Meal Preparation",
@@ -126,48 +127,57 @@ const ServiceSelection = () => {
   const navigate = useNavigate();
   const dispatch=useDispatch();
   const {Title}=useSelector(state=>state.serviceReducer);
-  const [selectedGender, setSelectedGender] = useState("male");
-  const [screenName, setScreenName] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [selectedGender, setSelectedGender] = useState("Male");
   const storedTitle = sessionStorage.getItem("selectedServiceTitle");
   const selectedService = combinedData.find((service) => service.title === Title);
-  const [price,setPrice]=useState(selectedService.servicesInfo.serviceData.price);
   const [totalPrice,setTotalPrice]=useState(0);
   const [basicServicePay,setBasicServicePay]=useState({});
+  const [basicPayAdded,setBasicPayAdded]=useState(false);
+
   const [addOns,setAddOns]=useState({});
   useEffect(()=>{
     console.log(addOns)
-  },[addOns])
+    console.log(basicServicePay)
+    //dispatch({type:'basicPayObj',payload:basicServicePay});
+
+    dispatch({type:'addOnsObj',payload:addOns});
+  },[basicServicePay,addOns,dispatch])
   
-  const [serviceInfo,setServiceInfo]=useState(localStorage.getItem('serviceInfo'))
+  //const [serviceInfo,setServiceInfo]=useState(localStorage.getItem('serviceInfo'))
   const moveNext=()=>{
-    dispatch({type:"addGenderAndAmount",payload:{Gender:selectedGender,TotalPrice:Number(totalPrice)}})
-    navigate("/DetailsRegBooking");
+    if(!basicPayAdded){
+      toast.error("Please avail basic service to move further");
+        return;
+    }
+    else{
+      dispatch({type:"addGenderAndAmount",payload:{Gender:selectedGender,TotalPrice:Number(totalPrice)}})
+      navigate("/DetailsRegBooking");
+    }
   }
   
   const handleServiceSelection=(mainHeading,price)=>{
-    //const initialPrice=Number(price);
-    const parsedServiceInfo = JSON.parse(serviceInfo);
-    const updatedServiceInfo = [...parsedServiceInfo, {gender:selectedGender,price }];
-    localStorage.setItem('serviceInfo', JSON.stringify(updatedServiceInfo));
-    setServiceInfo(JSON.stringify(updatedServiceInfo));
-    //  setTotalPrice(initialPrice)
-    //  console.log(initialPrice)
-    //  setBasicServicePay({[mainHeading]:Number(initialPrice)})
-    // // dispatch({type:"addGenderAndAmount",payload:{key1:"Gender",value1:selectedGender,key2:"Price",value2:price}})
-    // dispatch({type:"basicPay",payload:{[mainHeading]:Number(initialPrice)}})
+    // const parsedServiceInfo = JSON.parse(serviceInfo);
+    // const updatedServiceInfo = [...parsedServiceInfo, {gender:selectedGender,price }];
+    // localStorage.setItem('serviceInfo', JSON.stringify(updatedServiceInfo));
+    // setServiceInfo(JSON.stringify(updatedServiceInfo));
     if(Object.keys(basicServicePay).length !== 0){
+      setBasicPayAdded(false);
       const updatedBasePay={...basicServicePay}
       delete updatedBasePay[mainHeading];
       console.log(updatedBasePay);
       setBasicServicePay(updatedBasePay);
+      setAddOns({});
       dispatch({ type: 'removeBasicPay', payload: mainHeading });
-      setTotalPrice(prevPrice => {
-        console.log(prevPrice-Number(price))
-        return prevPrice-Number(price)
-      });
+      // setTotalPrice(prevPrice => {
+      //   console.log(prevPrice-Number(price))
+      //   return prevPrice-Number(price)
+      // });
+      setTotalPrice(0);
+
     }
     else{
+      setBasicPayAdded(true);
+      toast.success("You may avail addOns also")
       setBasicServicePay(prevBasicPay => {
         const updatedBasicPay = { ...prevBasicPay, [mainHeading]: Number(price) };
         console.log(updatedBasicPay)
@@ -180,15 +190,19 @@ const ServiceSelection = () => {
         console.log(updatedPrice);
         return updatedPrice;
       });
+      
   }
   }
   const sumUp=(heading,extraCharge)=>{
+    if(!basicPayAdded){
+      return;
+    }
     if(addOns[heading]){
+      
       const updatedAddOns={...addOns}
       delete updatedAddOns[heading];
       console.log(updatedAddOns);
       setAddOns(updatedAddOns);
-      dispatch({ type: 'removeAddOns', payload: heading });
       setTotalPrice(prevPrice => {
         console.log(prevPrice-Number(extraCharge))
         return prevPrice-Number(extraCharge)
@@ -204,25 +218,15 @@ const ServiceSelection = () => {
     setAddOns((prevAddOn) =>{
       const updatedAddOns = { ...prevAddOn, [heading]: Number(extraCharge) };
       console.log(updatedAddOns)
-      dispatch({type:"addAddOns",payload:updatedAddOns})
       return updatedAddOns;
     })
   }
-    handleQuantityChange(true);
   }
   const handleGenderChange = (event) => {
     setSelectedGender(event.target.value);
   };
 
-  const handleScreenNameChange = (event) => {
-    setScreenName(event.target.value);
-  };
-
-  const handleQuantityChange = (increment) => {
-    setQuantity((prevQuantity) =>
-      increment ? prevQuantity + 1 : Math.max(1, prevQuantity - 1)
-    );
-  };
+  
   
   return (
     <Container>
@@ -243,19 +247,19 @@ const ServiceSelection = () => {
         >
           <FormControlLabel
             key="male"
-            value="male"
+            value="Male"
             control={<Radio />}
             label="Male"
           />
           <FormControlLabel
             key="female"
-            value="female"
+            value="Female"
             control={<Radio />}
             label="Female"
           />
           <FormControlLabel
             key="other"
-            value="other"
+            value="Other"
             control={<Radio />}
             label="Other"
           />
@@ -266,7 +270,7 @@ const ServiceSelection = () => {
         {storedTitle}
       </Typography>
 
-      {/* Card for main service */}
+     
       <Card
         sx={{
           height: "100%",
@@ -277,7 +281,7 @@ const ServiceSelection = () => {
       >
         <img
           src={selectedService.servicesInfo.serviceData.image}
-          alt="Service Image"
+          alt="Service"
           style={{
             width: "20%",
             objectFit: "cover",
@@ -323,7 +327,7 @@ const ServiceSelection = () => {
                 padding: "0.5rem",
                 background: "black",
               }}
-              // onClick={() => history("/DetailsRegBooking")}
+             
               onClick={()=>handleServiceSelection(selectedService.servicesInfo.serviceData.header,selectedService.servicesInfo.serviceData.price)}
               >
             
@@ -347,15 +351,15 @@ const ServiceSelection = () => {
           sx={{
             height: "100%",
             display: "flex",
-            width: "100%", // Adjusted width to fit two cards with margin
+            width: "100%",
             borderRadius: "1rem",
             marginBottom: "1rem",
-            marginRight: "1rem", // Added margin between cards
+            marginRight: "1rem",
           }}
         >
           <img
             src={addon.image}
-            alt={`Addon Image ${index}`}
+            alt={`Addon`}
             style={{
               width: "20%",
               objectFit: "cover",
@@ -368,7 +372,7 @@ const ServiceSelection = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              width: "100%", // Adjusted width for content
+              width: "100%",
             }}
           >
             <div
@@ -395,7 +399,9 @@ const ServiceSelection = () => {
                   minWidth: "3rem",
                   padding: "0.5rem",
                   background: "black",
+                  opacity:!basicPayAdded?0.5:1
                 }}
+                disabled={!basicPayAdded}
                 onClick={()=>sumUp(addon.header,addon.price)}
               >
                 <Typography
@@ -410,7 +416,8 @@ const ServiceSelection = () => {
         </Card>
       ))}
       <Box m={4} textAlign="center">
-        <Button variant="contained" color="primary" onClick={moveNext}>
+                
+        <Button variant="contained" color="primary" style={{opacity:!basicPayAdded?0.5:1}} onClick={moveNext}>
           Next
         </Button>
       </Box>

@@ -42,7 +42,6 @@ const sliderImageData = [
 const Pricing = () => {
   return (
     <Grid container spacing={1} style={{margin:1, overflow: 'hidden' }}>
-      {/* Left Section */}
       <Grid item xs={12} md={6}>
       <div style={{ maxHeight: '30rem', overflowY: 'auto' }}>
           <Grid container spacing={2}>
@@ -77,15 +76,9 @@ const Pricing = () => {
           </Grid>
         </div>
       </Grid>
-
-      {/* Right Section */}
       <Grid item xs={12} md={6}>
-        {/* Use the Slider component */}
         <Card>
         <Slider images={sliderImageData} />
-
-        {/* Additional Content Below Slider */}
-        
           <CardContent>
             <Typography align='center'>
               This is additional content below the slider image card in the right section.

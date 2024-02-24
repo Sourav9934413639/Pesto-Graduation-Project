@@ -31,7 +31,8 @@ export const checkout=catchAsyncErrors(async(req,res)=>{
    const saveDetails=await payDetails.create({
         razorpay_order_id,
         razorpay_payment_id,
-        razorpay_signature
+        razorpay_signature,
+        user:req.user
     })
     console.log(saveDetails)
     res.redirect(`http://localhost:3000/PaymentSuccess?reference=${razorpay_payment_id}`)

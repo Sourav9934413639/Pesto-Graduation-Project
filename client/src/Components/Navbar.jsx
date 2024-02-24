@@ -39,6 +39,7 @@ function Navbar() {
       console.log(data.message);
       setIsAuthenticated(false);
       setLoading(false);
+      history('/login');
     } catch (error) {
       console.error(error.response.data.message);
       setIsAuthenticated(true);

@@ -51,15 +51,6 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, [activeStep]);
-
-  // const handleNext = () => {
-  //   setActiveStep((prevStep) => (prevStep + 1) % items.length);
-  // };
-
-  // const handleBack = () => {
-  //   setActiveStep((prevStep) => (prevStep - 1 + items.length) % items.length);
-  // };
-
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ position: 'relative', width: '100%', height: '600px', overflow: 'hidden' }}>
@@ -87,8 +78,8 @@ const Home = () => {
               borderRadius: '25px', // Adjust this value to control the roundness
               display: 'flex',
               alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.2)', // Semi-transparent white background
-              border: '1px solid black', // Add border for visual separation
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              border: '1px solid black',
               width: '80%',
               marginLeft: '6%',
             }}
@@ -97,7 +88,7 @@ const Home = () => {
               style={{
                 marginRight: '10px',
                 padding: '8px',
-                color: 'black', // Adjust alpha value for consistency
+                color: 'black',
               }}
               color="primary"
             >
@@ -109,10 +100,10 @@ const Home = () => {
               style={{
                 flex: 1,
                 fontSize: '1.5em',
-                border: 'none', // Remove input border
-                outline: 'none', // Remove input outline
-                backgroundColor: 'transparent', // Make input background transparent
-                color: 'black', // Adjust alpha value for consistency
+                border: 'none',
+                outline: 'none',
+                backgroundColor: 'transparent',
+                color: 'black',
               }}
             />
           </Box>
@@ -125,7 +116,7 @@ const Home = () => {
             left: '10px',
             textAlign: 'left',
             color: 'white',
-            maxWidth: '300px', // Adjust the width as needed
+            maxWidth: '300px',
           }}
         >
           <Typography variant="h5" style={{ color: 'black', fontWeight: 'bold' }}>
@@ -136,13 +127,11 @@ const Home = () => {
           </Typography>
         </Box>
       </div>
-
-      {/* Our Featured Services Section */}
       <Box
         style={{
           position: 'relative',
           textAlign: 'center',
-          marginTop: '20px', // Adjust the spacing
+          marginTop: '20px',
         }}
       >
         <Typography variant="h4" style={{ color: 'black', marginBottom: '1%', fontWeight: 'bold' }}>
@@ -151,14 +140,12 @@ const Home = () => {
         <Typography variant="h6" style={{ color: 'black', marginBottom: '1%', fontWeight: 'bold' }}>
         Hire professionals,Experienced specifically for your needs
         </Typography>
-        {/* Cards Section */}
         <Box
           style={{
             display: 'flex',
             justifyContent: 'center',
             gap: '20px',
             flexWrap: 'wrap',
-             // Adjust the gap between cards
           }}
         >
           {featuredServices.map(service => (
@@ -202,7 +189,7 @@ const Home = () => {
         style={{ objectFit: 'contain', height: '150px' }}
       />
       <CardContent>
-        <Box style={{ textAlign: 'center', border: 'none' }}>{/* item.icon */}</Box>
+        <Box style={{ textAlign: 'center', border: 'none' }}></Box>
         <Typography variant="h6" component="div" style={{ color: 'black', fontWeight: 'bold' }}>
           {item.title}
         </Typography>
@@ -226,8 +213,6 @@ const Home = () => {
         <Typography variant="h4" style={{ color: 'black', marginBottom: '1%', fontWeight: 'bold' }}>
           FAQs
         </Typography>
-
-        {/* Accordion Section */}
         <Box
           style={{
             display: 'flex',

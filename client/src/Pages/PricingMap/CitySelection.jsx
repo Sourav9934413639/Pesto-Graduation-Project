@@ -6,11 +6,11 @@ import NoidaIcon from './Images/Noida.png';
 import PuneIcon from './Images/Pune.png';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const CitySelection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [serviceInfo, setServiceInfo] = useState(localStorage.getItem('serviceInfo'));
   const [selectedCity, setSelectedCity] = useState('');
 
   const cities = [
@@ -22,15 +22,17 @@ const CitySelection = () => {
 
   const handleCitySelection = (cityName) => {
     setSelectedCity(cityName);
-    const parsedServiceInfo = JSON.parse(serviceInfo);
-    const updatedServiceInfo = [...parsedServiceInfo, { location: cityName }];
-    localStorage.setItem('serviceInfo', JSON.stringify(updatedServiceInfo));
-    setServiceInfo(JSON.stringify(updatedServiceInfo));
     dispatch({ type: "addLocation", payload: { key: "Location", value: cityName } });
   };
 
   const moveNext = () => {
-    navigate("/ServiceSelection");
+    if(selectedCity===''){
+      toast.error("Select your city to move further");
+      return;
+    }
+    else{
+      navigate("/ServiceSelection");
+    }
   };
 
   return (
@@ -70,7 +72,7 @@ const CitySelection = () => {
         Select the location where you'd like to book a Helper
       </Typography>
       <Box mt={4} textAlign="center">
-        <Button variant="contained" color="primary" onClick={moveNext}>
+        <Button variant="contained" color="primary" style={{opacity:selectedCity===''? 0.5:1}}  onClick={moveNext}>
           Next
         </Button>
       </Box>

@@ -5,7 +5,6 @@ function About() {
   return (
     <MuiContainer maxWidth="lg" style={{ marginTop: '1%', marginBottom: '1%' }}>
       <Grid container spacing={3}>
-        {/* Left Section */}
         <Grid item xs={12} md={6}>
           <Box display="flex" alignItems="center">
             <Avatar
@@ -15,8 +14,6 @@ function About() {
             />
           </Box>
         </Grid>
-
-        {/* Right Section */}
         <Grid item xs={12} md={6}>
           <Box display="flex" flexDirection="column" justifyContent="center" height="100%">
             <Typography variant="h4" style={{ fontWeight: 'bold', textAlign: 'center' }}>Welcome to HelperHub</Typography>
@@ -27,16 +24,13 @@ function About() {
           </Box>
         </Grid>
       </Grid>
-
-      {/* Meet Our Team Section */}
       <Typography variant="h4" style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>Meet Our Team</Typography>
       <Grid container spacing={3} justifyContent="center" mt={2}>
-        {/* Card 1 */}
         <Grid item xs={12} md={4}>
           <Card>
             <Avatar
               alt="Team Member 1"
-              src="https://example.com/team-member-1.jpg" // Replace with the actual image URL
+              src="https://example.com/team-member-1.jpg"
               style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
             />
             <CardContent>
@@ -46,13 +40,11 @@ function About() {
             </CardContent>
           </Card>
         </Grid>
-
-        {/* Card 2 */}
         <Grid item xs={12} md={4}>
           <Card>
             <Avatar
               alt="Team Member 2"
-              src="https://example.com/team-member-2.jpg" // Replace with the actual image URL
+              src="https://example.com/team-member-2.jpg"
               style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
             />
             <CardContent>
@@ -62,13 +54,11 @@ function About() {
             </CardContent>
           </Card>
         </Grid>
-
-        {/* Card 3 */}
         <Grid item xs={12} md={4}>
           <Card>
             <Avatar
               alt="Team Member 3"
-              src="https://example.com/team-member-3.jpg" // Replace with the actual image URL
+              src="https://example.com/team-member-3.jpg"
               style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
             />
             <CardContent>

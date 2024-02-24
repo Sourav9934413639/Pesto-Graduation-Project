@@ -11,6 +11,15 @@ const paymentSchema=new mongoose.Schema({
     razorpay_signature:{
         type:String,
         required:true
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
+        required:true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
     }
 })
 export const payDetails=mongoose.model("paymentLists",paymentSchema);

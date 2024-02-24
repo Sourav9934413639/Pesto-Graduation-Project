@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Typography, Divider, Button, Box } from '@mui/material';
 import { useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 const DetailsRegardingBooking = () => {
-  const {Title}=useSelector(state=>state.serviceReducer)
+  const {Title}=useSelector(state=>state.serviceReducer);
   const dispatch=useDispatch();
   const [serviceOptions, setServiceOptions] = useState([]);
+  const [queryAnswered,setQueryAnswered]=useState(0);
+  
   const sections = [
     {
       title: 'Cleaning',
@@ -57,7 +60,7 @@ const DetailsRegardingBooking = () => {
           ],
         },
         {
-          heading: 'How many meals perday?',
+          heading: 'How many meals per day?',
           subHeading: 'Select 1 out of 3 options',
           data: [
             { label: 'BreakFast And Lunch', onClick: () => alert('Button 1 clicked') },
@@ -80,21 +83,7 @@ const DetailsRegardingBooking = () => {
             { label: 'Yes', onClick: () => alert('Button 1 clicked') },
             { label: 'No', onClick: () => alert('Button 2 clicked') },
           ],
-        },
-        {
-          headingBox: 'Inclusions',
-          inBox: true,
-          dataBox: [
-            {
-              subHeading: 'Breads',
-              description: 'Roti, Poori, Plain Paratha, Aloo Paratha, Gobhi Paratha, Pyaaz Paratha, Paneer Paratha, Mixed veg Paratha',
-            },
-            {
-              subHeading: 'Sabzi (Dry)',
-              description: 'Lauki ki sabzi, Tindey ki sabzi, Kaddu ki sabzi, Bhindi ki sabzi, Aloo methi, Aloo palak, Aloo jeera, Aloo gobhi, Aloo matar, Mixed veg',
-            },
-          ],
-        },
+        }
       ],
     },
     {
@@ -175,18 +164,17 @@ const DetailsRegardingBooking = () => {
       ],
     }
   ];
-   
-  // const [serviceInfo,setServiceInfo]=useState(localStorage.getItem('serviceInfo'))
-  
-   const storedTitle = sessionStorage.getItem("selectedServiceTitle");
   const history = useNavigate();
   const convertArrayToObject = (array) => {
     return array.reduce((result, currentObject) => {
       return { ...result, ...currentObject };
     }, {});
   }
- const handleSubmit=()=>{
-  
+ const handleSubmit=(totalQuery)=>{
+   if(queryAnswered !== totalQuery){
+      toast.error("Fill all fields...");
+      return;
+   }
   const singleObject = convertArrayToObject(serviceOptions);
   dispatch({ type: "addOtherServiceOptions", payload: singleObject });
   
@@ -194,21 +182,24 @@ const DetailsRegardingBooking = () => {
   
  }
 const handleOptionClick = (heading, label) => {
-  // const serviceInfo={Heading:heading,label:label}
-  // const serviceDescription={...serviceInfo}
-  // console.log(serviceDescription)
-  //  dispatch({type:"addOtherServiceOptions",payload:serviceDescription})
-  const serviceOption = { [heading]:label };
   
-  setServiceOptions(prevOptions => {
-    const updatedOptions = [...prevOptions, serviceOption];
-    // const singleObject = convertArrayToObject(updatedOptions);
-    // console.log(singleObject); // Now this will log the updated array
-    return updatedOptions;
-  });
-  
+  const isAlreadySelected = serviceOptions.some(option => Object.keys(option)[0] === heading);
+    let updatedOptions;
+    if (isAlreadySelected) {
+      updatedOptions = serviceOptions.map(option => {
+        if (Object.keys(option)[0] === heading) {
+          return { [heading]: label };
+        }
+        return option;
+      });
+    } else {
+      updatedOptions = [...serviceOptions, { [heading]: label }];
+      setQueryAnswered(queryAnswered + 1);
+    }
+    setServiceOptions(updatedOptions);
 };
   const renderData = (section) => {
+      const noOfQueries=section.subsections.length;
       if(Title.toLowerCase()===section.title.toLowerCase()) {
       return (
         <div key={section.title}>
@@ -237,6 +228,8 @@ const handleOptionClick = (heading, label) => {
                         border: '2px solid black',
                         borderColor: '#e7e7e7',
                         marginBottom: '1rem',
+                        backgroundColor: serviceOptions.some(option => option[subsection.heading] === button.label) ? 'rgb(0,0,0)' : 'white',
+                        color: serviceOptions.some(option => option[subsection.heading] === button.label) ? 'white' : '#454545'
                       }}
                       sx={{
                         marginRight: '10px',
@@ -288,19 +281,18 @@ const handleOptionClick = (heading, label) => {
               )}
             </div>
           ))}
+          <Button variant="contained" color="primary" style={{marginTop:'20px',opacity:(noOfQueries!==queryAnswered)?0.5:1}} onClick={()=>handleSubmit(noOfQueries)}>
+            Proceed
+          </Button>
         </div>
       );
     }
    
   };
-
-  //return <div style={{ padding: '20px' }}>{sections.map((section) => renderData(section))}</div>;
   return (
     <div style={{ padding: '20px' }}>
       {sections.map((section) => renderData(section))}
-      <Button variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: '20px' }}>
-        Proceed
-      </Button>
+      
     </div>
   );
 };
