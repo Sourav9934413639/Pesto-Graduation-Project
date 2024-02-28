@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 
-const ServicesCard = ({ title, imageUrl }) => {
+const ServicesCard = ({ title, serviceImgUrl }) => {
   const history = useNavigate();
   const cardStyles = {
     maxWidth: 300,
@@ -60,7 +61,7 @@ const ServicesCard = ({ title, imageUrl }) => {
   
   return (
     <Paper style={cardStyles}>
-      <img src={imageUrl} alt="" style={imageStyles} />
+      <img src={serviceImgUrl} alt="" style={imageStyles} />
       <div style={titleStyles}>{title}</div>
       <Button variant="contained" style={buttonStyles} onClick={handleBookNow}>
         Book Now
@@ -70,25 +71,31 @@ const ServicesCard = ({ title, imageUrl }) => {
 };
 
 const ServicesPage = () => {
-  const servicesData = [
-    {
-      title: 'Cooking',
-      imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29va3xlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
-    },
-    {
-      title: 'Cleaning',
-      imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Replace with actual image URL
-    },
-    {
-      title: 'Nanny',
-      imageUrl: 'https://media.istockphoto.com/id/1052914688/photo/mother-sits-with-child-on-floor-and-holding-doll.webp?b=1&s=170667a&w=0&k=20&c=FpwqNujCCTIPqjIK1f2vof_tbMfyy3-bKGtsHKgsLPQ=', // Replace with actual image URL
-    },
-    {
-      title: 'Nurse',
-      imageUrl: 'https://plus.unsplash.com/premium_photo-1676325101995-cdfc26d820bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNhbHxlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
-    },
-  ];
-
+  const [servicesData,setServicesData]=useState([])
+  // const servicesData = [
+    // {
+    //   title: 'Cooking',
+    //   imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29va3xlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
+    // },
+    // {
+    //   title: 'Cleaning',
+    //   imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Replace with actual image URL
+    // },
+    // {
+    //   title: 'Nanny',
+    //   imageUrl: 'https://media.istockphoto.com/id/1052914688/photo/mother-sits-with-child-on-floor-and-holding-doll.webp?b=1&s=170667a&w=0&k=20&c=FpwqNujCCTIPqjIK1f2vof_tbMfyy3-bKGtsHKgsLPQ=', // Replace with actual image URL
+    // },
+    // {
+    //   title: 'Nurse',
+    //   imageUrl: 'https://plus.unsplash.com/premium_photo-1676325101995-cdfc26d820bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNhbHxlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
+    // },
+  // ];
+  useEffect(()=>{
+     axios.get("http://localhost:4000/api/v1/allServices").then((res)=>{
+      console.log(res.data.services[0].services)
+        setServicesData(res.data.services[0].services)
+     }).catch((err)=>console.log(err))
+  },[])
   const containerStyles = {
     maxWidth: 1000,
     margin: '0 auto',

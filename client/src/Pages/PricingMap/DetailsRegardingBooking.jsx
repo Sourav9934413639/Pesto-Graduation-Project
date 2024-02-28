@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Typography, Divider, Button, Box } from '@mui/material';
-import { useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
+import WorkShiftAndDate from './WorkShiftAndDate';
+
 const DetailsRegardingBooking = () => {
   const {Title}=useSelector(state=>state.serviceReducer);
   const dispatch=useDispatch();
   const [serviceOptions, setServiceOptions] = useState([]);
   const [queryAnswered,setQueryAnswered]=useState(0);
-  
+  const [isOpen,setIsOpen]=useState(false);
+  const closePopUp=()=>{
+    setIsOpen(false);
+  } 
   const sections = [
     {
       title: 'Cleaning',
@@ -164,21 +168,23 @@ const DetailsRegardingBooking = () => {
       ],
     }
   ];
-  const history = useNavigate();
   const convertArrayToObject = (array) => {
     return array.reduce((result, currentObject) => {
       return { ...result, ...currentObject };
     }, {});
   }
+ 
  const handleSubmit=(totalQuery)=>{
    if(queryAnswered !== totalQuery){
       toast.error("Fill all fields...");
+      setIsOpen(false);
       return;
    }
+  
   const singleObject = convertArrayToObject(serviceOptions);
   dispatch({ type: "addOtherServiceOptions", payload: singleObject });
-  
-  history("/summary")
+  setIsOpen(true);
+  //history("/summary")
   
  }
 const handleOptionClick = (heading, label) => {
@@ -284,6 +290,7 @@ const handleOptionClick = (heading, label) => {
           <Button variant="contained" color="primary" style={{marginTop:'20px',opacity:(noOfQueries!==queryAnswered)?0.5:1}} onClick={()=>handleSubmit(noOfQueries)}>
             Proceed
           </Button>
+          <WorkShiftAndDate isOpen={isOpen}  onClose={closePopUp} />
         </div>
       );
     }
