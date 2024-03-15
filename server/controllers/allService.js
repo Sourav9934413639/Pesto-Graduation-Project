@@ -2,80 +2,61 @@ import ErrorHandler from "../Utility/ErrorHandler.js";
 import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
 import { Services } from "../models/allService.js";
 export const saveAllServices=catchAsyncErrors(async(req,res,next)=>{
-    const { title, serviceImgUrl } = req.body;
-        let existingServices = await Services.findOne();
-        if (!existingServices) {
-            
-            existingServices = new Services({
-                services: [{ title, serviceImgUrl }]
-            });
-        } else {
-           
-            existingServices.services.push({ title, serviceImgUrl });
+    
+    const allServices=await Services.find();
+    for(const element of allServices){
+        if(element.title===req.body.title){
+            return next(new ErrorHandler("Already saved data with this title",404))
         }
-        await existingServices.save();
-        res.status(201).json({
-            success: true,
-            message: 'Service added successfully',
-            addedService: { title, serviceImgUrl }
-        });
+    }
+    const arr=[];
+    const serviceData=await Services.create(req.body);
+    arr.push(serviceData);
+    res.status(201).json({
+        success:true,
+        message:"Service added successfully...",
+        allServices:arr
+    })
 })
 export const deleteService=catchAsyncErrors(async(req,res,next)=>{
-    const { serviceId } = req.params;
-    const existingServices = await Services.findOne();
-
-    if (!existingServices) {
-        return next(new ErrorHandler("No services found", 404));
-    }
-
-    const updatedServices = existingServices.services.filter(service => service._id.toString() !== serviceId);
-    if (updatedServices.length === existingServices.services.length) {
+    
+    let service=await Services.findById(req.params.id);
+    if (!service) {
         return next(new ErrorHandler("Service not found", 404));
     }
-
-    existingServices.services = updatedServices;
-    await existingServices.save();
-
+    await service.deleteOne();
     res.status(200).json({
-        success: true,
-        message: 'Service deleted successfully'
-    });
+        success:true,
+        message:'Service deleted successfully...'
+    })
 
 })
 export const updateService = catchAsyncErrors(async (req, res, next) => {
-    const { serviceId } = req.params;
-    const { title, serviceImgUrl } = req.body;
+   
+    let service = await Services.findById(req.params.id);
+    if (!service) {
+        return next(new ErrorHandler("This service not found", 404));
+    }
 
-    
-        const existingServices = await Services.findOne(); 
+    service.imgName=req.body.imgName;
+    await service.save();
+    res.status(200).json({
+        success: true,
+        message:' Service updated successfully...',
+        updatedService:service
+    });
 
-        if (!existingServices) {
-            return next(new ErrorHandler("No services found", 404));
-        }
-        const serviceIndex = existingServices.services.findIndex(service => service._id.toString() === serviceId);
-        if (serviceIndex === -1) {
-            return next(new ErrorHandler("Service not found", 404));
-        }
-        existingServices.services[serviceIndex].title = title;
-        existingServices.services[serviceIndex].serviceImgUrl = serviceImgUrl;
-
-        await existingServices.save();
-
-        res.status(200).json({
-            success: true,
-            message: 'Service updated successfully',
-            updatedService: existingServices.services[serviceIndex]
-        });
     
 });
 export const displayAllServices=catchAsyncErrors(async(req,res,next)=>{
-    const getServices=await Services.find();
-        if(!getServices){
-            return next(new ErrorHandler("Service not found",404));
-        }
-        res.status(200).json({
-            success:true,
-            services:getServices
-        })
+    
+    const allServices=await Services.find();
+    if(!allServices){
+        return next(new ErrorHandler("Service not found",404))
+    }
+    res.status(200).json({
+        success:true,
+        allServices
+    })
     
 })

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 
-const ServicesCard = ({ title, serviceImgUrl }) => {
+const ServicesCard = ({ title, imgName }) => {
   const history = useNavigate();
   const cardStyles = {
     maxWidth: 300,
@@ -24,7 +24,7 @@ const ServicesCard = ({ title, serviceImgUrl }) => {
 
   const imageStyles = {
     width: '100%',
-    height: '100%',
+    height: '25vh',
     objectFit: 'cover',
     borderRadius: '16px',
     transition: 'transform 4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
@@ -52,16 +52,12 @@ const ServicesCard = ({ title, serviceImgUrl }) => {
     color: '#fff', 
   };
   const handleBookNow = () => {
-    console.log('Button clicked. Storing title in session. Title:', title);
-    sessionStorage.setItem('selectedServiceTitle', title);
-    localStorage.setItem('serviceInfo', JSON.stringify([{title}]));
-    
-    history(`/Services/${encodeURIComponent(title)}`);
+     history(`/service/${title}`);
   };
   
   return (
     <Paper style={cardStyles}>
-      <img src={serviceImgUrl} alt="" style={imageStyles} />
+      <img src={`/ImagesFiles/AllServices/${imgName}.jpg`} alt="" style={imageStyles} />
       <div style={titleStyles}>{title}</div>
       <Button variant="contained" style={buttonStyles} onClick={handleBookNow}>
         Book Now
@@ -73,29 +69,36 @@ const ServicesCard = ({ title, serviceImgUrl }) => {
 const ServicesPage = () => {
   const [servicesData,setServicesData]=useState([])
   // const servicesData = [
-    // {
-    //   title: 'Cooking',
-    //   imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29va3xlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
-    // },
-    // {
-    //   title: 'Cleaning',
-    //   imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // Replace with actual image URL
-    // },
-    // {
-    //   title: 'Nanny',
-    //   imageUrl: 'https://media.istockphoto.com/id/1052914688/photo/mother-sits-with-child-on-floor-and-holding-doll.webp?b=1&s=170667a&w=0&k=20&c=FpwqNujCCTIPqjIK1f2vof_tbMfyy3-bKGtsHKgsLPQ=', // Replace with actual image URL
-    // },
-    // {
-    //   title: 'Nurse',
-    //   imageUrl: 'https://plus.unsplash.com/premium_photo-1676325101995-cdfc26d820bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNhbHxlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
-    // },
+  //   {
+  //     "title": "Cooking",
+  //     "imgName":"MealPreparation"
+  //   },
+  //   {
+  //     "title": "Cleaning",
+  //    "imgName":"Brooming"
+  //   },
+  //   {
+  //     "title": "Nanny",
+  //     "imgName":"ChildCare",
+  //     imageUrl: 'https://media.istockphoto.com/id/1052914688/photo/mother-sits-with-child-on-floor-and-holding-doll.webp?b=1&s=170667a&w=0&k=20&c=FpwqNujCCTIPqjIK1f2vof_tbMfyy3-bKGtsHKgsLPQ=', // Replace with actual image URL
+  //   },
+  //   {
+  //     title: 'Nurse',
+  //     imageUrl: 'https://plus.unsplash.com/premium_photo-1676325101995-cdfc26d820bb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaWNhbHxlbnwwfHwwfHx8MA%3D%3D', // Replace with actual image URL
+  //   },
   // ];
   useEffect(()=>{
-     axios.get("http://localhost:4000/api/v1/allServices").then((res)=>{
-      console.log(res.data.services[0].services)
-        setServicesData(res.data.services[0].services)
-     }).catch((err)=>console.log(err))
+    fetchAllServices();
+     
   },[])
+  const fetchAllServices=async()=>{
+    try {
+      const {data:{allServices}}=await axios.get("http://localhost:4000/api/v1/allServices");
+      setServicesData(allServices)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const containerStyles = {
     maxWidth: 1000,
     margin: '0 auto',

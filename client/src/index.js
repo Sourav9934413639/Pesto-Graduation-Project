@@ -10,14 +10,15 @@ const AppWrapper=()=>{
   const [isAuthenticated,setIsAuthenticated]=useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
+  const [userRole, setUserRole] = useState("PUBLIC");
+
   return (
-    <Context.Provider value={{isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUser}}>
+    <Context.Provider value={{isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUser,userRole,setUserRole}}>
       <App />
     </Context.Provider>
   )
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>

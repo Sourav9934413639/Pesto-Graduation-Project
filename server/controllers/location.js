@@ -1,42 +1,54 @@
-import { Location } from '../models/location.js';
-import fs from 'fs';
-import path from 'path';
+import ErrorHandler from "../Utility/ErrorHandler.js";
+import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
+import { Location } from "../models/location.js";
 
-export const saveLocations = async (req, res) => {
-  const { label } = req.body;
-    if (!req.file) {
-      throw new Error('No image uploaded');
+export const saveLocation=catchAsyncErrors(async(req,res,next)=>{
+    const allLocations=await Location.find();
+    if(!allLocations){
+        return next(new ErrorHandler("All locations are missing",404));
     }
-    console.log(req.file)
-    
+    const locationArray=[];
+    const createLocationCard=await Location.create(req.body);
+    locationArray.push(createLocationCard);
+    res.status(201).json({
+        success:true,
+        message:"Location added successfully...",
+        allLocations:locationArray
+    })
 
-    let existingLocation = await Location.findOne({ label });
-    if (!existingLocation) {
-      existingLocation = new Location({ label,icon:req.file.filename });
-    }
-
-    
-
-    await existingLocation.save();
-
-    const responseData = {
-      success: true,
-      message: 'Location added successfully',
-    
-    existingLocation
-    };
-    res.status(201).json(responseData);
- };
-
-export const displayLocations = async (req, res) => {
-    const getLocations = await Location.find();
-
-    if (!getLocations || getLocations.length === 0) {
-      return res.status(404).json({ success: false, message: 'Location not found' });
+})
+export const getAllLocations=catchAsyncErrors(async(req,res,next)=>{
+    const allLocations=await Location.find();
+    if(!allLocations){
+        return next(new ErrorHandler("All locations are missing",404));
     }
     res.status(200).json({
-      success: true,
-      getLocations
-    });
-  
-};
+        success:true,
+        allLocations
+    })
+
+})
+export const updateLocation=catchAsyncErrors(async(req,res,next)=>{
+    const location=await Location.findById(req.params.id);
+    if(!location){
+        return next(new ErrorHandler("This location is not found",404));
+    }
+    location.label=req.body.label;
+    location.icon=req.body.icon;
+    await location.save();
+    res.status(200).json({
+        success:true,
+        message:"Location updated successfully..."
+    })
+})
+export const deleteLocation=catchAsyncErrors(async(req,res,next)=>{
+    const location=await Location.findById(req.params.id);
+    if(!location){
+        return next(new ErrorHandler("This location is not found",404));
+    }
+    await location.deleteOne();
+    res.status(200).json({
+        success:true,
+        message:"This location is deleted successfully..."
+    })
+})

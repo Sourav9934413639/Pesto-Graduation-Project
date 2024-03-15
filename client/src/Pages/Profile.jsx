@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from 'react';
 import { TextField, Button, Grid, Box, Container as MuiContainer } from '@mui/material';
 import { Context } from '../index';
@@ -5,16 +6,21 @@ import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearPaymentInfo, setPaymentInfo } from '../Redux/paymentReducer';
+import { Stack } from '@mui/system';
 
 function Profile() {
-  const { isAuthenticated, loading, user } = useContext(Context);
-  
+  const { isAuthenticated, loading } = useContext(Context);
+  const dispatch = useDispatch();
+  const { cardName, cardNumber, expiryDate, cvv } = useSelector((state) => state.paymentReducer);
+
   const [basicInfo, setBasicInfo] = useState({
-    username: user.username || '',
-    email: user.email || '',
-    mobileNumber: user.mobileNumber || '',
-    dob: user.dob || '',
-    gender: user.gender || '',
+    username: '',
+    email: '',
+    mobileNumber: '',
+    dob: '',
+    gender: ''
   });
 
   const [password, setPassword] = useState({
@@ -23,12 +29,27 @@ function Profile() {
     confirmPassword: '',
   });
 
-  const [paymentInfo, setPaymentInfo] = useState({
+  const [paymentInfo, setPaymentInfoLocal] = useState({
     cardName: '',
     cardNumber: '',
     expiryDate: '',
     cvv: '',
   });
+
+  const fetchUserDetails = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/api/v1/userDetails', { withCredentials: true });
+      const { username, email, mobileNumber, dob, gender } = response.data.user;
+      setBasicInfo({ username, email, mobileNumber, dob, gender });
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  };
+
+  useEffect(() => {
+    setPaymentInfoLocal({ cardName, cardNumber, expiryDate, cvv });
+    fetchUserDetails();
+  }, [cardName, cardNumber, expiryDate, cvv]);
 
   const handleBasicInfoChange = (event) => {
     setBasicInfo({
@@ -37,7 +58,6 @@ function Profile() {
     });
   };
 
-
   const handlePasswordChange = (event) => {
     setPassword({
       ...password,
@@ -45,14 +65,12 @@ function Profile() {
     });
   };
 
-  
-  const handleCardUpdation = (event) => {
-    setPaymentInfo({
+  const handleCardChange = (event) => {
+    setPaymentInfoLocal({
       ...paymentInfo,
       [event.target.name]: event.target.value,
     });
   };
-
 
   const handleUpdation = async (event) => {
     event.preventDefault();
@@ -64,7 +82,7 @@ function Profile() {
           email: basicInfo.email,
           mobileNumber: basicInfo.mobileNumber,
           dob: basicInfo.dob,
-          gender: basicInfo.gender
+          gender: basicInfo.gender,
         },
         { withCredentials: true }
       );
@@ -73,51 +91,42 @@ function Profile() {
     } catch (error) {
       console.error('Error updating user details:', error);
       toast.error(error.response.data.message);
-
     }
   };
-
 
   const handlePasswordUpdation = async (event) => {
     event.preventDefault();
     try {
       const response = await axios.put(
         'http://localhost:4000/api/v1/password/update',
-        { 
-          oldPassword:password.oldPassword,
-          newPassword:password.newPassword,
-          confirmPassword:password.confirmPassword
+        {
+          oldPassword: password.oldPassword,
+          newPassword: password.newPassword,
+          confirmPassword: password.confirmPassword,
         },
         { withCredentials: true }
       );
       console.log('Password Updated:', response.data);
-      toast.success(response.data.message);
-
+      toast.success('Password updated successfully...');
     } catch (error) {
       console.error('Error updating password:', error);
-      toast.error(error.response.data.message);
-
+      toast.error('Something went wrong! Try again');
+    } finally {
+      setPassword({ oldPassword: '', newPassword: '', confirmPassword: '' });
     }
   };
-  useEffect(() => {
-  const storedPaymentInfo = localStorage.getItem('paymentInfo');
-  if (storedPaymentInfo) {
-    setPaymentInfo(JSON.parse(storedPaymentInfo));
-  }
-}, []);
 
-const handlePaymentInfoUpdation = async (event) => {
-  event.preventDefault();
-  try {
-    localStorage.setItem('paymentInfo', JSON.stringify(paymentInfo));
-    toast.success("Payment information saved in your device");
+  const handlePaymentInfoUpdation = (event) => {
+    event.preventDefault();
+    dispatch(setPaymentInfo(paymentInfo));
+    toast.success('Payment information saved in Redux store');
+  };
 
-  } catch (error) {
-    console.error('Error while saving payment info to local storage:', error);
-    toast.error("Failed to save payment information in your device.");
-  }
-};
-   return (
+  const clearData = () => {
+    dispatch(clearPaymentInfo());
+  };
+
+  return (
     loading ? <Loader /> : (
       <MuiContainer maxWidth="lg">
         {!isAuthenticated ? (
@@ -128,166 +137,168 @@ const handlePaymentInfoUpdation = async (event) => {
             </Link>
           </div>
         ) : (
-            <>
-            <div style={{display:'flex'}}>
-            <form onSubmit={handleUpdation} style={{ padding: '0 16px', marginBottom: '20px' }}>
+          <Stack>
+            <Box  sx={{ display: 'flex' ,justifyContent:'space-between'}}>
+              <form onSubmit={handleUpdation} style={{ padding: '0 16px', marginBottom: '20px' }}>
+                <Grid container spacing={2} justifyContent="center">
+                  <Grid item xs={12} sm={10} mt={2}>
+                    <Box fontWeight="bold" fontSize={20} textAlign="center" sx={{mb:3}}>Basic Information:</Box>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="Name"
+                      name="username"
+                      value={basicInfo.username}
+                      onChange={handleBasicInfoChange}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="Email"
+                      name="email"
+                      value={basicInfo.email}
+                      onChange={handleBasicInfoChange}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="Mobile"
+                      name="mobileNumber"
+                      value={basicInfo.mobileNumber}
+                      onChange={handleBasicInfoChange}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      type="date"
+                      label="Date of birth"
+                      name="dob"
+                      variant="outlined"
+                      value={(basicInfo.dob && basicInfo.dob.substring(0, 10)) || ''}
+                      onChange={handleBasicInfoChange}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="Gender"
+                      name="gender"
+                      value={basicInfo.gender}
+                      onChange={handleBasicInfoChange}
+                    />
+                    <Box textAlign="center" mt={2} mb={4}>
+                      <Button type="submit" variant="contained" color="primary" onClick={handleUpdation}>
+                        Save
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </form>
+              <form onSubmit={handlePasswordUpdation} style={{ padding: '0 16px', marginBottom: '20px' }}>
+                <Grid container spacing={2} justifyContent="center">
+                  <Grid item xs={12} sm={10} mt={2}>
+                    <Box fontWeight="bold" fontSize={20} textAlign="center" sx={{mb:3}}>Change Password:</Box>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="Old Password"
+                      name="oldPassword"
+                      type="password"
+                      value={password.oldPassword}
+                      onChange={handlePasswordChange}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="New Password"
+                      name="newPassword"
+                      type="password"
+                      value={password.newPassword}
+                      onChange={handlePasswordChange}
+                    />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      sx={{ mb: 1 }}
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      type="password"
+                      value={password.confirmPassword}
+                      onChange={handlePasswordChange}
+                    />
+                    <Box textAlign="center" mt={2} mb={4}>
+                      <Button type="submit" variant="contained" color="primary">
+                        Save
+                      </Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </form>
+            </Box>
+            <form onSubmit={handlePaymentInfoUpdation} style={{ padding: '0 16px' }}>
               <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} sm={6} mt={2}>
-                  <Box fontWeight="bold" fontSize={20} textAlign="center">Basic Information:</Box>
+                <Grid item xs={12} sm={6}>
+                  <Box fontWeight="bold" fontSize={20} textAlign="center">
+                    Payment Information:
+                  </Box>
+                  <Box fontWeight="bold" fontSize={16} textAlign="center" sx={{mb:3}}>
+                    Add card details
+                  </Box>
                   <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Name"
-              name="username"
-              value={basicInfo.username}
-              onChange={handleBasicInfoChange}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Email"
-              name="email"
-              value={basicInfo.email}
-              onChange={handleBasicInfoChange}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Mobile"
-              name="mobileNumber"
-              value={basicInfo.mobileNumber}
-              onChange={handleBasicInfoChange}
-              
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Date of birth"
-              name="dob"
-              value={basicInfo.dob.substring(0,10)}
-              onChange={handleBasicInfoChange}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Gender"
-              name="gender"
-              value={basicInfo.gender}
-              onChange={handleBasicInfoChange}
-            />
-            <Box textAlign="center" mt={2} mb={4}>
-          <Button type="submit" variant="contained" color="primary" onClick={handleUpdation}>
-            Save
-          </Button>
-        </Box>
+                    fullWidth
+                    size="small"
+                    sx={{ mb: 1 }}
+                    label="Name on card"
+                    name="cardName"
+                    value={paymentInfo.cardName}
+                    onChange={handleCardChange}
+                  />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    sx={{ mb: 1 }}
+                    label="Card number"
+                    name="cardNumber"
+                    value={paymentInfo.cardNumber}
+                    onChange={handleCardChange}
+                  />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    sx={{ mb: 1 }}
+                    label="Expiry Date"
+                    name="expiryDate"
+                    value={paymentInfo.expiryDate}
+                    onChange={handleCardChange}
+                  />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    sx={{ mb: 1 }}
+                    label="CVV"
+                    name="cvv"
+                    value={paymentInfo.cvv}
+                    onChange={handleCardChange}
+                  />
                 </Grid>
               </Grid>
-              
+              <Box textAlign="center" mt={2} mb={4}>
+                <Button type="submit" variant="contained" color="primary" style={{ marginRight: '16px' }}>
+                  Save
+                </Button>
+                <Button onClick={clearData} variant="contained" color="primary">
+                  Clear
+                </Button>
+              </Box>
             </form>
-            <form onSubmit={handlePasswordUpdation} style={{ padding: '0 16px', marginBottom: '20px' }}>
-              <Grid container spacing={2} justifyContent="center">
-                <Grid item xs={12} sm={6} mt={2}>
-                  <Box fontWeight="bold" fontSize={20} textAlign="center">Change Password:</Box>
-                  <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Old Password"
-              name="oldPassword"
-              type="password"
-              value={password.oldPassword}
-              onChange={handlePasswordChange}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="New Password"
-              name="newPassword"
-              type="password"
-              value={password.newPassword}
-              onChange={handlePasswordChange}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              value={password.confirmPassword}
-              onChange={handlePasswordChange}
-            />
-             <Box textAlign="center" mt={2} mb={4}>
-          <Button type="submit" variant="contained" color="primary">
-            Save
-          </Button>
-        </Box>
-                </Grid>
-              </Grid>
-            </form>
-            </div>
-            <form onSubmit={handleCardUpdation} style={{ padding: '0 16px' }}>
-            <Grid container spacing={2} justifyContent="center">
-          <Grid item xs={12} sm={6}>
-            <Box fontWeight="bold" fontSize={20} textAlign="center">
-              Payment Information:
-            </Box>
-            <Box fontWeight="bold" fontSize={16} textAlign="center">
-              Add card details
-            </Box>
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Name on card"
-              name="cardName"
-              value={paymentInfo.cardName}
-              onChange={handleCardUpdation}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              type="number"
-              label="Card number"
-              name="cardNumber"
-              value={paymentInfo.cardNumber}
-              onChange={handleCardUpdation}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="Expiry Date"
-              name="expiryDate"
-              value={paymentInfo.expiryDate}
-              onChange={handleCardUpdation}
-            />
-            <TextField
-              fullWidth
-              size="small"
-              sx={{ mb: 1 }}
-              label="CVV"
-              name="cvv"
-              value={paymentInfo.cvv}
-              onChange={handleCardUpdation}
-            />
-          </Grid>
-        </Grid>
-        <Box textAlign="center" mt={2} mb={4}>
-          <Button type="submit" variant="contained" color="primary" onClick={handlePaymentInfoUpdation}>
-            Save
-          </Button>
-        </Box>
-              
-            </form>
-        </>
+          </Stack>
         )}
       </MuiContainer>
     )

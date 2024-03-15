@@ -12,7 +12,7 @@ const Footer = () => {
         color: 'white',
         padding: 2,
         width: '100%',
-        marginTop: 'auto', // Push the footer to the bottom of the container
+        marginTop: 'auto', 
       }}
     >
       <Container>
@@ -21,13 +21,13 @@ const Footer = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            flexWrap: 'wrap', // Allow content to wrap
-            gap: '1rem', // Add some space between sections
+            flexWrap: 'wrap',
+            gap: '1rem', 
           }}
         >
-          {/* Left Section */}
+         
           <Box sx={{ flex: '1', minWidth: '250px' }}>
-            {/* Follow Us On Icons */}
+            
             <Typography variant="h6" gutterBottom>
               Follow Us On
               <IconButton color="inherit" component={Link} href="#">
@@ -38,12 +38,12 @@ const Footer = () => {
               </IconButton>
             </Typography>
 
-            {/* HelperHub Font-like Logo */}
+            
             <Typography variant="h6" gutterBottom>
               HelperHub
             </Typography>
 
-            {/* Small 5-line Paragraph */}
+            
             <Typography variant="body2">
               HelperHub is your dedicated partner in creating a nurturing home environment. Explore our range of
               services designed to make your life easier and more enjoyable. Whether you're seeking reliable caregivers,
@@ -51,9 +51,9 @@ const Footer = () => {
             </Typography>
           </Box>
 
-          {/* Center Section (Menu) */}
+        
           <Box sx={{ flex: '1', minWidth: '250px', textAlign: 'center' }}>
-            {/* Menu Links */}
+            
             <Typography variant="body2" style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
               <Link href="/home" color="inherit">
                 Home
@@ -70,9 +70,9 @@ const Footer = () => {
             </Typography>
           </Box>
 
-          {/* Right Section */}
+          
           <Box sx={{ flex: '1', minWidth: '250px', textAlign: 'left' }}>
-            {/* Additional Right-aligned content */}
+        
             <Typography variant="body2">
               <Typography>HelperHub—Your Partner in Home Wellness</Typography>
               <Typography style={{ margin: '0.4rem 0' }}>

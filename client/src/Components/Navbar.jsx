@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -13,10 +13,11 @@ import { Context } from "../index";
 import axios from 'axios';
 
 function Navbar() {
-  const { isAuthenticated, setIsAuthenticated, loading, setLoading } = useContext(Context);
+  const { isAuthenticated, setIsAuthenticated, loading, setLoading, user, setUser,setUserRole} = useContext(Context);
   const history = useNavigate();
   const [servicesMenuAnchor, setServicesMenuAnchor] = useState(null);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [titles,setTitles]=useState([]);
   const toggleDrawer = () => {
     setDrawerOpen(!isDrawerOpen);
   };
@@ -31,7 +32,7 @@ function Navbar() {
     history(path);
     handleServicesMenuClose();
   };
-
+ 
   const handleLogout = async() => {
     setLoading(true);
     try {
@@ -39,13 +40,32 @@ function Navbar() {
       console.log(data.message);
       setIsAuthenticated(false);
       setLoading(false);
+      setUser({});
+      setUserRole("PUBLIC");
       history('/login');
     } catch (error) {
       console.error(error.response.data.message);
       setIsAuthenticated(true);
+      if(user.role === "admin"){
+        setUserRole("ADMIN");
+      }else{
+        setUserRole("USER");
+      }
       setLoading(false);
     }
-  };
+  }
+  const fetchTitlesFromDatabase=async()=>{
+    try {
+      const {data}=await axios.get('http://localhost:4000/api/v1/allServices');
+      setTitles(data.allServices); 
+    } catch (error) {
+      console.log(error);
+    }
+  }
+useEffect(()=>{
+  fetchTitlesFromDatabase();
+},[])
+
   return (
     <>
       <AppBar position="static" sx={{ backgroundColor: "black" }}>
@@ -59,6 +79,15 @@ function Navbar() {
             </IconButton>
           </Hidden>
           <Hidden smDown implementation="css">
+            { 
+              (isAuthenticated && user && user.role ==='admin')?
+              (<Button color="inherit" onClick={() => history("/Admin")}>
+              Admin
+            </Button>):
+            (
+              null
+            )
+            }
             <Button color="inherit" onClick={() => history("/Home")}>
               Home
             </Button>
@@ -104,20 +133,15 @@ function Navbar() {
         <MenuItem onClick={() => navigateTo("/Services/All services")}>
           Services(All)
         </MenuItem>
-        
-        <MenuItem onClick={() => navigateTo("/Services/Cooking")}>
-          Cooking Maid
-        </MenuItem>
-        
-        <MenuItem onClick={() => navigateTo("/Services/Nurse")}>
-          Medical Care
-        </MenuItem>
-        <MenuItem onClick={() => navigateTo("/Services/Nanny")}>
-          Nanny
-        </MenuItem>
-        <MenuItem onClick={() => navigateTo("/Services/Cleaning")}>
-          House Maid
-        </MenuItem>
+
+        {
+          titles && titles.length !==0
+          && titles.map((item)=>(
+            <MenuItem key={item._id} onClick={() => navigateTo(`/Service/${item.title}`)}>
+                  {item.title}
+             </MenuItem>
+          ))
+        }
       </Menu>
     </>
   );

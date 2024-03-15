@@ -1,16 +1,12 @@
 import mongoose from 'mongoose';
 const servicesSchema=new mongoose.Schema({
-    services:[
-    {
     title:{
         type:String,
         required:true
     },
-    serviceImgUrl:{
+    imgName:{
         type:String,
         required:true
     }
-    }        
-  ]
 })
 export const Services=mongoose.model("allServices",servicesSchema);

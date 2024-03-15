@@ -21,7 +21,7 @@ import toast from 'react-hot-toast';
 import HouseHoldImage from '../Images/RegistrationImg.png';
 
 const RegistrationForm = () => {
-    const {isAuthenticated,setIsAuthenticated,loading,setLoading}=useContext(Context);
+    const {isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUserRole}=useContext(Context);
     const [hover, setOnhover] = useState(false);
     const hoverEffect = () => {
       setOnhover(true);
@@ -79,7 +79,14 @@ const RegistrationForm = () => {
       }
     };
   
-    if(isAuthenticated) return <Navigate to={"/"} />
+    if(isAuthenticated) {
+      if(user.role === "admin"){
+        setUserRole("ADMIN");
+      }else{
+        setUserRole("USER");
+      }
+      return <Navigate to={"/"} />
+    }
   return (
     <Container component="main" maxWidth="lg" sx={{ width: '80%' }}>
          <CssBaseline />  
@@ -174,7 +181,8 @@ const RegistrationForm = () => {
                   onChange={handleFormChange}
                   InputLabelProps={{ shrink: true }}
                   sx={{ marginBottom: 1.5 }}
-                />                <TextField
+                />                
+                <TextField
                   fullWidth
                   label="Mobile Number"
                   name="mobileNumber"

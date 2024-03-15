@@ -13,7 +13,8 @@ const sendEmail=async(options)=>{
         form:process.env.SMPT_MAIL,
         to:options.email,
         subject:options.subject,
-        text:options.message
+        text:options.message,
+        
     }
     await transporter.sendMail(mailOptions);
 }

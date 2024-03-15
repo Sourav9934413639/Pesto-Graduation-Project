@@ -1,43 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid, Box, Typography, Card, CardMedia, Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-const helperData = [
-  {
-    image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    title: 'Cleaning',
-    description: 'Book a professional housekeeper for your daily chores',
-    heading: 'Online Maid Service',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29va3xlbnwwfHwwfHx8MA%3D%3D',
-    title: 'Cooking',
-    description: 'Book a professional  chef to prepare meals for you and your family.',
-    heading: 'Online Cook Service',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1560707854-fb9a10eeaace?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    title: 'Nanny',
-    description: 'Book a professional nanny caretaker who cares for your children.',
-    heading: 'Online Nanny Service',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    title: 'Nurse',
-    description: 'Book a professional nurse for your well beings',
-    heading: 'Online Medical Care Service',
-  },
-];
+import axios from 'axios';
 
 function ServicesDescription() {
   const navigate = useNavigate();
   const { title } = useParams();
+  const [helperData,setHelperData]=useState([]);
   const dispatch=useDispatch();
-  const selectedService = helperData.find(service => service.title === title);
   
+  useEffect(()=>{
+    fetchParticularServiceInfo();
+  },[])
+  const fetchParticularServiceInfo=async()=>{
+    try {
+      const {data:{allService}}=await axios.get("http://localhost:4000/api/v1/service");
+      setHelperData(allService)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const selectedService = helperData.find(service => service.title === title);
   if (!selectedService) {
-    return <div>Service not found</div>;
+    return <div>Loading...</div>;
   }
   const handleBooking=()=>{
     dispatch({type:"addTitleFromMenu",payload:{key:"Title",value:title}})
@@ -45,14 +32,16 @@ function ServicesDescription() {
   }
   return (
     <Container maxWidth="lg" style={{ marginTop: '1%', marginBottom: '1%' }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Card sx={{ width: '100%', height: '100%', borderRadius: '8px' }}>
+      <Grid container spacing={10}>
+        <Grid item xs={12} md={6} height={'80vh'}>
+          <Card sx={{ width: '100%', height: '100%', borderRadius: '15px' }}>
             <CardMedia
               component="img"
               alt="Service Image"
               height="100%"
-              image={selectedService.image}
+              width="100%"
+              border="10px solid black"
+              image={`/ImagesFiles/AllServices/${selectedService.imgName}.jpg`}
             />
           </Card>
         </Grid>

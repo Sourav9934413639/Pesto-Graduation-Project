@@ -1,8 +1,12 @@
 import express from 'express';
-import { contactDetails } from '../controllers/contact.js';
-//import { isAuthenticated } from '../middleware/auth.js';
+import { contactDetails, getPostedMessages } from '../controllers/contact.js';
+import { isAuthenticated, isAuthorized } from '../middleware/auth.js';
 const router=express.Router();
-router.route("/contact").post(contactDetails);
+router.route("/contact")
+      .post(isAuthenticated,contactDetails)
+router.route("/contact/:userId")
+      .get(isAuthenticated,isAuthorized("admin"),getPostedMessages);
+
 
 
 export default router;

@@ -10,7 +10,6 @@ import axios from 'axios'
 import toast from 'react-hot-toast';
 const ResetPassword = () => {
   const {token}=useParams();
-  // const [oldPassword,setOldPassword]=useState('');
   const [newPassword,setNewPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
   const {isAuthenticated,setIsAuthenticated,loading,setLoading}=useContext(Context);

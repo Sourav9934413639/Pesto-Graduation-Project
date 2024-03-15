@@ -19,7 +19,7 @@ const items = [
   { id: 1, content: <img src="https://img.freepik.com/free-photo/different-ingredients-composition-with-copy-space_23-2148541881.jpg?w=1380&t=st=1705303719~exp=1705304319~hmac=2e5866a79b5a958388a2a78326cae788f3f2cabf156859d150d5db81888dc24e" alt="Slide 1" style={{ width: '100%', position: 'relative', height: '600px' }} /> },
   { id: 2, content: <img src="https://img.freepik.com/free-vector/white-abstract-background-3d-paper-style_23-2148403776.jpg?w=996&t=st=1705303794~exp=1705304394~hmac=9e6d133aeda498078176f879163729dfd5e07aa351ce86756d450140011eb6ff" alt="Slide 2" style={{ width: '100%', position: 'relative', height: '600px' }} /> },
   { id: 3, content: <img src="https://img.freepik.com/free-photo/dishes-eco-soap-cleaners_23-2148824645.jpg?w=1380&t=st=1705303899~exp=1705304499~hmac=0158d7dac8ea135bff304c8fb372e8a4c3b2dba8753f910ab91bbab9a7f745e1" alt="Slide 3" style={{ width: '100%', position: 'relative', height: '600px' }} /> },
-  // Add more slides as needed
+  
 ];
 
 const featuredServices = [
@@ -39,7 +39,7 @@ const faqs = [
    answer: '1: Choose your desired service, fill in your requirements and make a booking on our platform.2: Confirm your requirements with the relationship manager assigned to you.3: Sit tight while our relationship manager finds the right fit for your home.' },
   { id: 2, question: 'What if I’m not satisfied with the services?', answer: 'While all our helpers undergo an intensive assessment regime before being certified as a Helper, we still believe that there’s always room for improvement. In order to ensure that you obtain the optimum fit for your home, we provide an ‘complimentary replacement policy’ as part of your subscription. Just reach out to your relationship manager or mail us at HelperHub.com' },
   { id: 3, question: 'Why do your services seem more expensive than other helpers in the market?', answer: 'Unlike maid services/agencies we don’t charge a hefty commission fee from our clients, just a nominal booking amount. The entire wage as estimated by our wage estimation matrix(based on the Minimum Wages Act Of 1948) is paid in full to the helper.' },
-  // Add more FAQs as needed
+  
 ];
 const Home = () => {
   const [activeStep, setActiveStep] = useState(0);

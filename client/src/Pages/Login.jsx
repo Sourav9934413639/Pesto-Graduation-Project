@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 import SignInImage from '../Images/LoginImg.png';
 
 const SignInForm = () => {
-    const {isAuthenticated,setIsAuthenticated,loading,setLoading}=useContext(Context);
+    const {isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUserRole}=useContext(Context);
     const navigate = useNavigate();
     const location = useLocation();
   const [form, setForm] = useState({
@@ -82,7 +82,14 @@ const SignInForm = () => {
     color:hover?'#f57c00':'#ffa726',
     transition:'all 0.5s ease-in-out'
   }
- if(isAuthenticated) return <Navigate to={"/"} />
+  if(isAuthenticated) {
+    if(user.role === "admin"){
+      setUserRole("ADMIN");
+    }else{
+      setUserRole("USER");
+    }
+    return <Navigate to={"/"} />
+  }
   return (
     <Container component="main" maxWidth="lg" sx={{ width: '80%' }}>
       <Box
