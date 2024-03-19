@@ -11,9 +11,13 @@ const AppWrapper=()=>{
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [userRole, setUserRole] = useState("PUBLIC");
+  const [orderId,setOrderId]=useState('');
+  const [unseenMessage,setUnseenMessage]=useState(0);
+
 
   return (
-    <Context.Provider value={{isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUser,userRole,setUserRole}}>
+    <Context.Provider value={{isAuthenticated,setIsAuthenticated,loading,setLoading,
+    user,setUser,userRole,setUserRole,orderId,setOrderId,unseenMessage,setUnseenMessage}}>
       <App />
     </Context.Provider>
   )

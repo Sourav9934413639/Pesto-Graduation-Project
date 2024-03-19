@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Grid, Typography, TextField, Button, Card, CardContent, CardActions, IconButton, Modal } from '@mui/material';
+import { Box, Container, Grid, Typography, TextField, Button, Card, CardContent, CardActions, IconButton, Modal, CardMedia, Divider } from '@mui/material';
 
 import axios from 'axios';
 import Loader from '../Components/Loader';
@@ -13,7 +13,6 @@ const AllServices = () => {
   const [servicesData, setServicesData] = useState({ title: '', imgName: '' });
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
 
@@ -24,10 +23,10 @@ const AllServices = () => {
   const fetchAllServices = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/allServices');
-      setServices(response.data.allServices);
+      const {data} = await axios.get('http://localhost:4000/api/v1/allServices');
+      setServices(data.allServices);
     } catch (error) {
-      setError('Error fetching services');
+       console.log(error.response);
     } finally {
       setLoading(false);
     }
@@ -83,14 +82,8 @@ const AllServices = () => {
     setOpenModal(false);
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
+  if (loading) return <Loader />;
+  
   return (
     <Container component="main" maxWidth="lg" sx={{ width: '80%' }}>
       <Box
@@ -99,7 +92,7 @@ const AllServices = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#F7EFE5',
+          backgroundColor: 'rgba(0,0,180,0.3)',
           borderRadius: '2px',
           margin: '1rem',
           padding: '1rem',
@@ -108,6 +101,7 @@ const AllServices = () => {
         <Typography component="h1" variant="h5" fontWeight="bold" sx={{ marginBottom: 2 }}>
           Add services
         </Typography>
+        <Divider/>
         <form onSubmit={handleServiceForm} style={{ width: '100%' }}>
           <TextField
             fullWidth
@@ -141,15 +135,15 @@ const AllServices = () => {
         <Grid container spacing={2}>
           {services.map((service) => (
             <Grid item key={service._id} xs={12} sm={6} md={4} lg={3}>
-              <Card sx={{ display: 'flex', flexDirection: 'column' }}>
-                {/* <CardMedia 
+              <Card sx={{ display: 'flex', flexDirection: 'column',height:'500px' }}>
+                <CardMedia 
                   component="img"
                   alt="All services"
                   height="70%"
                   width="100%"
-                  
-                  image={`/ImagesFiles/Allservices/${imgName}.jpg`}               
-                /> */}
+              
+                  image={`/ImagesFiles/Allservices/${service.imgName}.jpg`}               
+                />
                 <CardContent style={{height:'150px'}}>
                   <Typography variant="h6"><strong>Title: </strong>{service.title}</Typography>
                   <Typography variant="h6"><strong>File name: </strong>{service.imgName}</Typography>
@@ -157,12 +151,7 @@ const AllServices = () => {
                   
                 </CardContent>
                 <CardActions style={{justifyContent:'space-between'}}>
-                  {/* <Button size="small" color="primary" onClick={() => handleOpenModal(service)}>
-                    Edit
-                  </Button>
-                  <IconButton size="small" color="error" onClick={() => handleDeleteService(service._id)}>
-                    <DeleteIcon />
-                  </IconButton> */}
+                 
                    <IconButton onClick={() => handleOpenModal(service)} aria-label="edit" size="small" title="Edit">
                       <EditIcon style={{transform:'scale(1.2)',color:'grey'}}/>
                     </IconButton>

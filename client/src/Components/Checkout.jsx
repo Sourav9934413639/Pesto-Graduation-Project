@@ -1,6 +1,6 @@
 import axios from "axios";
-import logo from '../Images/Logo.png'
 const checkoutHandler=async(amount)=>{
+    
     try {
       const {data:{key}}=await axios.get("http://localhost:4000/getKey");
       const {data:{order}}=await axios.post("http://localhost:4000/api/v1/checkout",{amount},{withCredentials:true})
@@ -10,7 +10,7 @@ const checkoutHandler=async(amount)=>{
         currency: order.currency,
         name: "HelperHub",
         description: "Transaction amount for required service",
-        image: logo,
+        image: "/ImagesFiles/HelperHub/Logo.jpg",
         order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
         callback_url: "http://localhost:4000/api/v1/paymentVerification",
         prefill: {

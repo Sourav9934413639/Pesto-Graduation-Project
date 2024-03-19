@@ -35,6 +35,7 @@ export const checkout=catchAsyncErrors(async(req,res)=>{
         user:req.user
     })
     console.log(saveDetails)
+    
     res.redirect(`http://localhost:3000/PaymentSuccess?reference=${razorpay_payment_id}`)
   }
   else{

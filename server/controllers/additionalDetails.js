@@ -43,6 +43,17 @@ export const showAllAdditionalInfo=catchAsyncErrors(async(req,res,next)=>{
         allAdditionalInfo
     })
 })
+export const getAdditionalInfoByTitle=catchAsyncErrors(async(req,res,next)=>{
+  const {title}=req.body;
+  if(!title){
+      return next(new ErrorHandler("Additional Information based on this title doesn't exist",400))
+  }
+  const particularAdditionalInfo=await AdditionalData.findOne({title});
+  res.status(200).json({
+      success:true,
+      particularAdditionalInfo
+  })
+})
 export const updateSubsection = catchAsyncErrors(async (req, res, next) => {
   const { id, subsectionId } = req.params;
   const { heading, subHeading, data } = req.body;

@@ -13,8 +13,6 @@ import {
 import { Link } from 'react-router-dom';
 import { Context } from '../index';
 import toast from 'react-hot-toast';
-import SignInImage from '../Images/LoginImg.png';
-
 const SignInForm = () => {
     const {isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUserRole}=useContext(Context);
     const navigate = useNavigate();
@@ -108,8 +106,8 @@ const SignInForm = () => {
 
           <Grid item xs={8}>
             <img
-              src={SignInImage}
-              alt="House hold"
+              src={`/Authentication/Login.jpg`}
+              alt="Login Pic"
               style={{ width: '100%', height: '100%', objectFit:'contain', borderRadius: '4px' }}
             />
           </Grid>

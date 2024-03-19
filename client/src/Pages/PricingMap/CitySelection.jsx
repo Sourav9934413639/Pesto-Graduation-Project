@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Grid, Button, Paper } from '@mui/material';
-// import DelhiIcon from './Images/Delhi.png';
-// import GurgaonIcon from './Images/Gurgaon.png';
-// import NoidaIcon from './Images/Noida.png';
-// import PuneIcon from './Images/Pune.png';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import Loader from '../../Components/Loader';
 
 const CitySelection = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedCity, setSelectedCity] = useState('');
   const [cities,setCities]=useState([]);
-  
+  const [loading,setLoading]=useState(true);
  useEffect(()=>{
     fetchAllLocations();
  },[])
@@ -23,7 +20,9 @@ const CitySelection = () => {
     const {data:{allLocations}}=await axios.get("http://localhost:4000/api/v1/location");
     setCities(allLocations);
   } catch (error) {
-    console.log(error);
+    console.log(error.response);
+  }finally{
+    setLoading(false);
   }
  }
   const handleCitySelection = (cityName) => {
@@ -41,7 +40,7 @@ const CitySelection = () => {
       navigate("/ServiceSelection");
     }
   };
-
+  if(loading) return <Loader/>
   return (
     <Box margin={2}>
       <Typography variant="h4" align="center" fontWeight="bold" margin={2}>

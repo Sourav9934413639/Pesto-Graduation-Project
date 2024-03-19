@@ -27,6 +27,17 @@ export const getAllServiceData=catchAsyncErrors(async(req,res,next)=>{
         allService
     })
 })
+export const getSingleServiceByTitle=catchAsyncErrors(async(req,res,next)=>{
+    const {title}=req.body;
+    if(!title){
+        return next(new ErrorHandler("Service based on this title doesn't exist",400))
+    }
+    const service=await ParticularService.findOne({title});
+    res.status(200).json({
+        success:true,
+        service
+    })
+ })
 export const updateParticularServiceData=catchAsyncErrors(async(req,res,next)=>{
     const particularService=await ParticularService.findById(req.params.id);
     if(!particularService){

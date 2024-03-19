@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Avatar, Box, Typography, Container as MuiContainer, Card, CardContent } from '@mui/material';
-
+import axios from 'axios';
+import Loader from '../Components/Loader';
 function About() {
+  const [showMembers,setShowMembers]=useState([]);
+  const [loading,setLoading]=useState(true);
+  const fetchMembersData=async()=>{
+    try {
+      const {data}=await axios.get("/AboutUs/MeetOurTeam/MemberCards.json");
+      setShowMembers(data);
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setLoading(false);
+    }
+  }
+  useEffect(()=>{
+    fetchMembersData();
+  },[])
+  if(loading) return <Loader/>
   return (
     <MuiContainer maxWidth="lg" style={{ marginTop: '1%', marginBottom: '1%' }}>
       <Grid container spacing={3}>
@@ -9,7 +26,7 @@ function About() {
           <Box display="flex" alignItems="center">
             <Avatar
               alt="Dentists"
-              src="https://media.istockphoto.com/id/863454098/photo/woman-cleaning-with-a-spray-detergent.jpg?s=612x612&w=0&k=20&c=YhdRnyLeJIX54ri_wBAThx_D3NQlB1_bpWKE0F2nAiw="
+              src="/AboutUs/CoverImage/Cover.jpg"
               style={{ width: '100%', height: '100%', borderRadius: '8px' }}
             />
           </Box>
@@ -26,48 +43,25 @@ function About() {
       </Grid>
       <Typography variant="h4" style={{ fontWeight: 'bold', textAlign: 'center', marginTop: '20px' }}>Meet Our Team</Typography>
       <Grid container spacing={3} justifyContent="center" mt={2}>
-        <Grid item xs={12} md={4}>
+        {
+          showMembers && showMembers.length !==0 && 
+          showMembers.map((member)=>(
+          <Grid item xs={12} md={4}>
           <Card>
             <Avatar
-              alt="Team Member 1"
-              src="https://example.com/team-member-1.jpg"
+              alt={`Team Member ${member.id}`}
+              src={`/AboutUs/MeetOurTeam/Member${member.id}.jpg`}
               style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
             />
             <CardContent>
-              <Typography variant="h6">Team Member 1</Typography>
-              <Typography variant="subtitle1">Title: Title 1</Typography>
-              <Typography variant="body2">Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Typography>
+              <Typography variant="h6">Team Member {member.id}</Typography>
+              <Typography variant="subtitle1">{member.subtitle}</Typography>
+              <Typography variant="body2">{member.body}</Typography>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} md={4}>
-          <Card>
-            <Avatar
-              alt="Team Member 2"
-              src="https://example.com/team-member-2.jpg"
-              style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
-            />
-            <CardContent>
-              <Typography variant="h6">Team Member 2</Typography>
-              <Typography variant="subtitle1">Title: Title 2</Typography>
-              <Typography variant="body2">Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Card>
-            <Avatar
-              alt="Team Member 3"
-              src="https://example.com/team-member-3.jpg"
-              style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px 8px 0 0' }}
-            />
-            <CardContent>
-              <Typography variant="h6">Team Member 3</Typography>
-              <Typography variant="subtitle1">Title: Title 3</Typography>
-              <Typography variant="body2">Bio: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+          ))
+        }
       </Grid>
     </MuiContainer>
   );

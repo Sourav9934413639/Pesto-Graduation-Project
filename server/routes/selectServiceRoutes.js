@@ -1,6 +1,6 @@
 
 import express from 'express';
-import { addAddOn, deleteAddOn, deleteService, getSelectedService, saveSelectedService, showAllServices, updateAddOn } from '../controllers/selectService.js';
+import { addAddOn, deleteAddOn, deleteService, getSelectedService, getServiceInfoByTitle, saveSelectedService, showAllServices, updateAddOn } from '../controllers/selectService.js';
 import {isAuthenticated, isAuthorized} from '../middleware/auth.js'
 const router = express.Router();
 
@@ -10,6 +10,8 @@ router.route("/admin/selectService")
 router.route("/selectService")
         .get(showAllServices);
 
+router.route("/selectService/title")
+        .post(getServiceInfoByTitle);
 router.route("/admin/selectService/:id")
     .get(isAuthenticated,isAuthorized("admin"),getSelectedService)
     .post(isAuthenticated,isAuthorized("admin"),addAddOn)

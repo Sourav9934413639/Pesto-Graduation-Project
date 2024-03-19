@@ -2,7 +2,7 @@
 import { Button, Card, CardContent, Grid, IconButton, Modal, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Box } from '@mui/system';
@@ -12,7 +12,7 @@ const AdditionalDetailsCard = ({ details,fetchAllAdditionalDetails,enteredTitle}
   const [editSubsection, setEditSubsection] = useState({_id:'', heading: '', subHeading: '', data: [] });
   const [editOption, setEditOption] = useState('');
   const [editOptionsArr, setEditOptionsArr] = useState([]);
-  
+
   const handleEdition = (subsection) => {
     setEditSubsection(subsection);
     setEditOptionsArr(subsection.data.map((item) => item.label));
@@ -57,15 +57,14 @@ const AdditionalDetailsCard = ({ details,fetchAllAdditionalDetails,enteredTitle}
       const { data } = await axios.delete(`http://localhost:4000/api/v1/admin/additionalDetails/${details._id}/subsection/${subsectionId}`,
       {withCredentials:true});
       toast.success(data.message);
-      // updateSubsections(details._id);
       fetchAllAdditionalDetails();
     } catch (error) {
       toast.error('Something went wrong! Try again.');
     }
   };
-
+  
   return (
-    <Grid item xs={12} mt={4} style={{ height: '100%' }}>
+    <Grid item xs={12} style={{ height: '100%' }}>
       <Card
          sx={{
           backgroundColor: enteredTitle === details.title ? 'rgba(0,0,255,0.1)' : 'inherit',
@@ -95,9 +94,9 @@ const AdditionalDetailsCard = ({ details,fetchAllAdditionalDetails,enteredTitle}
                 </Grid>
                 
                 <Grid item xs={2} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', gap: '1.5rem' }}>
-                  <IconButton aria-label="view" size="small" title="View" onClick={() => handleEdition(subsection)}>
-                    <VisibilityIcon style={{ color: 'green', transform: 'scale(1.5)' }} />
-                  </IconButton>
+                  <IconButton onClick={() => handleEdition(subsection)} aria-label="edit" size="small" title="Edit">
+                      <EditIcon style={{transform:'scale(1.2)',color:'grey'}}/>
+                    </IconButton>
                   <IconButton aria-label="delete" size="small" title="Delete" onClick={() => deleteSubsection(subsection._id)}>
                     <DeleteIcon style={{ color: 'red', transform: 'scale(1.5)' }} />
                   </IconButton>

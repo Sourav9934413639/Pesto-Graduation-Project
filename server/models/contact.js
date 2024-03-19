@@ -11,6 +11,20 @@ const contactSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    isSeen:{
+        type:Boolean,
+        default:false
+    },
+    ticket:{
+        status:{
+            type:String,
+            default:"Pending"
+        },
+        adminName:{
+            type:String,
+            default:"None"
+        }
+    },
     createdAt: {
       type: Date,
       default: Date.now,

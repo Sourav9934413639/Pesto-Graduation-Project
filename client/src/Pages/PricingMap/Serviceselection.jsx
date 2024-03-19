@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Loader from "../../Components/Loader";
 
 const ServiceSelection = () => {
   const navigate = useNavigate();
@@ -26,23 +27,26 @@ const ServiceSelection = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [basicServicePay, setBasicServicePay] = useState({});
   const [basicPayAdded, setBasicPayAdded] = useState(false);
-  const [combinedData, setCombinedData] = useState([]);
   const [addOns, setAddOns] = useState({});
+  const [getDetails,setGetDetails] = useState({});
+  const [loading,setLoading]=useState(true);
 
-  const fetchAllServices = async () => {
+  const fetchServiceByTitle = useCallback(async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/v1/selectService");
-      setCombinedData(response.data.showAllServices);
+      const {data} = await axios.post("http://localhost:4000/api/v1/selectService/title",{title:Title});
+      setGetDetails(data.particularServiceDetail);
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false);
     }
-  };
+  },[Title])
 
   useEffect(() => {
     dispatch({ type: 'basicPayObj', payload: basicServicePay });
     dispatch({ type: 'addOnsObj', payload: addOns });
-    fetchAllServices();
-  }, [basicServicePay, addOns, dispatch]);
+    fetchServiceByTitle();
+  }, [basicServicePay, addOns, dispatch,fetchServiceByTitle]);
 
   const moveNext = () => {
     if (!basicPayAdded) {
@@ -50,7 +54,7 @@ const ServiceSelection = () => {
       return;
     } else {
       dispatch({ type: "addGenderAndAmount", payload: { Gender: selectedGender, TotalPrice: Number(totalPrice) } });
-      navigate("/DetailsRegBooking");
+      navigate("/DetailsRegardingBooking");
     }
   };
 
@@ -66,7 +70,7 @@ const ServiceSelection = () => {
       setTotalPrice(0);
     } else {
       setBasicPayAdded(true);
-      const numOfAddons=combinedData.find((item)=>item.title === Title).servicesInfo.addonsData.length;
+      const numOfAddons=getDetails?.servicesInfo?.addonsData.length;
        if (numOfAddons !==0){
          toast.success("You may avail addOns also");
        }
@@ -114,11 +118,9 @@ const ServiceSelection = () => {
   const handleGenderChange = (event) => {
     setSelectedGender(event.target.value);
   };
-  const selectedService = combinedData.find((service) => service.title === Title);
 
-  if (!selectedService) {
-    return <div>Loading...</div>; 
-  }
+
+  if (loading) return <Loader/>
 
   return (
     <Container>
@@ -171,7 +173,7 @@ const ServiceSelection = () => {
         }}
       >
         <img
-          src={`/ImagesFiles/${Title}/BasicService/${selectedService.servicesInfo.serviceData.imgName}.jpg`}
+          src={`/ImagesFiles/${Title}/BasicService/${getDetails?.servicesInfo?.serviceData?.imgName}.jpg`}
           alt="Service"
           style={{
             width: "20%",
@@ -196,16 +198,16 @@ const ServiceSelection = () => {
             }}
           >
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              {selectedService.servicesInfo.serviceData.header}
+              {getDetails?.servicesInfo?.serviceData?.header}
             </Typography>
             <Typography variant="h6">
-              Price: Rs{selectedService.servicesInfo.serviceData.price}
+              Price: Rs{getDetails?.servicesInfo?.serviceData?.price}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              {selectedService.servicesInfo.serviceData.description}
+              {getDetails?.servicesInfo?.serviceData?.description}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              {selectedService.servicesInfo.serviceData.description2}
+              {getDetails?.servicesInfo?.serviceData?.description2}
             </Typography>
           </div>
           <CardActions sx={{ alignSelf: "flex-end" }}>
@@ -220,8 +222,8 @@ const ServiceSelection = () => {
               }}
               onClick={() =>
                 handleServiceSelection(
-                  selectedService.servicesInfo.serviceData.header,
-                  selectedService.servicesInfo.serviceData.price
+                  getDetails?.servicesInfo?.serviceData?.header,
+                  getDetails?.servicesInfo?.serviceData?.price
                 )
               }
             >
@@ -236,11 +238,11 @@ const ServiceSelection = () => {
         </CardContent>
       </Card>
 
-      {selectedService.servicesInfo.addonsData && selectedService.servicesInfo.addonsData.length !==0  && (<Typography variant="h5" marginTop={2} fontWeight={"bold"}>
+      {getDetails?.servicesInfo?.addonsData && getDetails?.servicesInfo?.addonsData.length !==0  && (<Typography variant="h5" marginTop={2} fontWeight={"bold"}>
         Add-Ons
       </Typography>)}
-      {selectedService.servicesInfo.addonsData && selectedService.servicesInfo.addonsData.length !==0 &&
-      selectedService.servicesInfo.addonsData.map((addon, index) => (
+      {getDetails?.servicesInfo?.addonsData && getDetails?.servicesInfo?.addonsData?.length !==0 &&
+      getDetails?.servicesInfo?.addonsData.map((addon, index) => (
         <Card
           key={index}
           sx={{

@@ -3,11 +3,9 @@ import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
+
 const BasicServiceCards = ({baseServiceInfo,delBaseServiceInfo}) => {
-    
     const navigate=useNavigate();
-    console.log(baseServiceInfo)
-    
     const handleCardView = () => {
         navigate(`/admin/serviceDetails/basicService/${baseServiceInfo._id}`, { state: { baseServiceInfo }});
       }
@@ -30,16 +28,7 @@ const BasicServiceCards = ({baseServiceInfo,delBaseServiceInfo}) => {
             
             </CardContent>
             <CardActions style={{justifyContent:'space-between'}}>
-            {/* <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={includeAddons}
-                    onChange={handleCheckboxChange}
-                    name="includeAddons"
-                  />
-                }
-                label="Include Addons"
-              /> */}
+            
                 <IconButton onClick={handleCardView} aria-label="view" size="small" title="View">
             <VisibilityIcon style={{transform:'scale(1.2)',color:'green'}} />
           </IconButton>
