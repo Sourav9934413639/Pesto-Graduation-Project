@@ -60,10 +60,10 @@ const fetchFAQs=async()=>{
     <>
     <Slider/>
     <div style={{ position: 'relative' }}>
-      <div style={{ position: 'relative', width: '100%', height: '600px', overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
         
 
-        <Box
+        {/* <Box
           style={{
             position: 'absolute',
             top: '10px',
@@ -72,18 +72,18 @@ const fetchFAQs=async()=>{
             color: 'white',
             maxWidth: '300px',
           }}
-        >
-          <Typography variant="h5" style={{ color: 'black', fontWeight: 'bold' }}>
+        > */}
+          <Typography variant="h2" style={{ color: 'black', fontWeight: 'bold',textAlign:'center' }}>
             "Bringing comfort home"
           </Typography>
-          <Typography style={{ color: 'black', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+          <Typography style={{ color: 'black', fontWeight: 'bold', whiteSpace: 'nowrap',textAlign:'center' }}>
             Your trusted partner for seamless service
           </Typography>
-        </Box>
+        
       </div>
       <Box
         style={{
-          position: 'relative',
+          position:'relative',
           textAlign: 'center',
           marginTop: '20px',
         }}
