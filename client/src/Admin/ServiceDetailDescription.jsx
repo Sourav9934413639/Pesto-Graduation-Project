@@ -1,11 +1,12 @@
 
-import { Button, Card, CardContent, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Button, Card, CardContent, Divider, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import AdditionalDetailsCard from './AdditionalDetailsCard';
 import toast from 'react-hot-toast';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Loader from '../Components/Loader';
 
 const AdditionalInfo = () => {
   const [title, setTitle] = useState('');
@@ -15,7 +16,7 @@ const AdditionalInfo = () => {
   const [optionsArr, setOptionsArr] = useState([]);
   const [subsections, setSubsections] = useState([]);
   const [enteredTitle, setEnteredTitle] = useState('');
-
+  const [loading,setLoading]=useState(true);
   const [getAllAdditionalDetails,setGetAllAdditionalDetails]=useState([]);
   
   const fetchTitlesFromDatabase = async () => {
@@ -73,6 +74,8 @@ const AdditionalInfo = () => {
       setGetAllAdditionalDetails(data.allAdditionalInfo);
     } catch (error) {
       console.log(error)
+    }finally{
+      setLoading(false);
     }
   }
 
@@ -87,15 +90,18 @@ const AdditionalInfo = () => {
     fetchAllAdditionalDetails();
   }, [])
   
+  if(loading) return <Loader/>;
+
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Card>
             <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Additional Information Form
-              </Typography>
+            <Grid item xs={12} mt={4} mb={2}>
+          <Typography variant='h4' textAlign={'center'} mt={1}>Add service with additional details</Typography>
+          <Divider/>
+        </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={12} >
                   <Select
@@ -210,6 +216,10 @@ const AdditionalInfo = () => {
           </Card>
         </Grid>
       </Grid>
+      <Grid item xs={12} mt={4} mb={2}>
+          <Typography variant='h4' textAlign={'center'} mb={1}>All services additional details</Typography>
+          <Divider/>
+        </Grid>
       <Grid container spacing={10} sx={{ justifyContent: 'center', rowGap: '20px',height:'auto' }}>
           {
             getAllAdditionalDetails && getAllAdditionalDetails.length !==0 &&

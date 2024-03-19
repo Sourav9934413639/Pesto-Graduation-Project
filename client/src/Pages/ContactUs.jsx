@@ -13,22 +13,21 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WebIcon from '@mui/icons-material/Web';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import Mapimage from '../Images/MAP.png';
 import { Context } from '../index'; 
 import toast from 'react-hot-toast';
 
 const ContactUs = () => {
-  const { loading, setLoading, user } = useContext(Context); 
+  const { loading, setLoading, user ,unseenMessage,setUnseenMessage} = useContext(Context); 
   const [message, setMessage] = useState('');
   
   const submitHandler = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:4000/api/v1/contact',{message},{withCredentials:true});
-      console.log(response.data);
-      toast.success(response.data.message)
+      const {data} = await axios.post('http://localhost:4000/api/v1/contact',{message},{withCredentials:true});
+      toast.success(data.message)
       setMessage('');
+      setUnseenMessage(unseenMessage+1);
     
     } catch (error) {
       console.log(error);
@@ -37,10 +36,12 @@ const ContactUs = () => {
       setLoading(false);
     }
   };
-
+  const fieldStyle={ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' };
+  const legendStyle={ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' };
+  const fieldsetStyle={ border: '1px solid rgba(0,0,0,0.3)', borderRadius: '5px', margin: '0.5rem', padding: '0.8rem' };
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: '1%', marginBottom: '1%' }}>
+    <Container maxWidth="lg" sx={{py:'5rem',minHeight:'64.5vh'}}>
       <Grid container spacing={3}>
         
         <Grid item xs={12} sm={6}>
@@ -48,17 +49,17 @@ const ContactUs = () => {
             <Typography variant="h5" style={{ fontWeight: 'bolder' }} gutterBottom>
               Contact Information
             </Typography>
-            <fieldset style={{ border: '1px solid rgba(0,0,0,0.3)', borderRadius: '5px', margin: '0.5rem', padding: '0.8rem' }}>
-              <legend style={{ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' }}>Username*</legend>
-              <div style={{ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' }}>{user ? user.username : ''}</div>
+            <fieldset style={fieldsetStyle}>
+              <legend style={legendStyle}>Username*</legend>
+              <div style={fieldStyle}>{user ? user.username : ''}</div>
             </fieldset>
-            <fieldset style={{ border: '1px solid rgba(0,0,0,0.3)', borderRadius: '5px', margin: '0.5rem', padding: '0.8rem' }}>
-              <legend style={{ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' }}>Email*</legend>
-              <div style={{ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' }}>{user ? user.email : ''}</div>
+            <fieldset style={fieldsetStyle}>
+              <legend style={legendStyle}>Email*</legend>
+              <div style={fieldStyle}>{user ? user.email : ''}</div>
             </fieldset>
-            <fieldset style={{ border: '1px solid rgba(0,0,0,0.3)', borderRadius: '5px', margin: '0.5rem', padding: '0.8rem' }}>
-              <legend style={{ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' }}>Mobile Number*</legend>
-              <div style={{ color: 'rgba(0,0,0,0.6)', fontSize: '18px', fontFamily: 'sans-serif' }}>{user ? user.mobileNumber : ''}</div>
+            <fieldset style={fieldsetStyle}>
+              <legend style={legendStyle}>Mobile Number*</legend>
+              <div style={fieldStyle}>{user ? user.mobileNumber : ''}</div>
             </fieldset>
             <TextField
               label="Message"
@@ -79,7 +80,7 @@ const ContactUs = () => {
         
             <Grid item xs={12} sm={6} style={{ position: 'relative' }}>
               <img
-                src={Mapimage}
+                src={"ImagesFiles/ContactUs/Map.jpg"}
                 alt="Map"
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />

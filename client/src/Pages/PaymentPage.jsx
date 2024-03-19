@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   Button,
@@ -7,8 +7,31 @@ import {
   Paper,
   CssBaseline,
 } from '@mui/material';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { Context } from '../index';
+
+
 
 const PaymentPage = () => {
+  const {orderId,setOrderId}=useContext(Context)
+  console.log(orderId);
+  const saveUserPurchaseDetails=useCallback(async()=>{
+    try {
+      const {data}=await axios.put(`http://localhost:4000/api/v1/user/purchase/order/${orderId}`,{},{withCredentials:true})
+      console.log(data)
+      toast.success(data.message);
+    } catch (error) {
+      toast.error("Something went wrong! Try again");
+      console.log(error);
+    }finally{
+      setOrderId('');
+    }
+  },[orderId,setOrderId])
+  useEffect(()=>{
+    saveUserPurchaseDetails();
+  },[saveUserPurchaseDetails])
+
   const searchQuery = useSearchParams()[0];
   const refNo = searchQuery.get('reference');
 

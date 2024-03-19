@@ -57,7 +57,7 @@ const Sidebar = () => {
         <div style={{ width: drawerWidth }}>
           <Button onClick={handleDrawerClose}>&times; Close</Button>
           <List sx={{cursor:'pointer'}}>
-            <ListItem onClick={() => handleOptionClick('Admin Dashboard')} style={{ backgroundColor: activeOption === 'Admin Dashboard' ? 'blue' : 'inherit', color: activeOption === 'Admin Dashboard' ? 'white' : 'inherit' }}>
+            <ListItem onClick={() => handleOptionClick('Admin Dashboard')} style={{marginTop:'1rem', backgroundColor: activeOption === 'Admin Dashboard' ? 'blue' : 'inherit', color: activeOption === 'Admin Dashboard' ? 'white' : 'inherit' }}>
               <ListItemText primary="Admin Dashboard" />
             </ListItem>
             <ListItem onClick={() => handleOptionClick('All services')} style={{ backgroundColor: activeOption === 'All services' ? 'blue' : 'inherit', color: activeOption === 'All services' ? 'white' : 'inherit' }}>

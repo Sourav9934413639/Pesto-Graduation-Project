@@ -1,36 +1,36 @@
-import { Box, Button, Card, CardActions, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, Grid, IconButton, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import toast from 'react-hot-toast';
+import Loader from '../Components/Loader';
 
 const Location = () => {
   const [locationForm, setLocationForm] = useState({ label: '', icon: '' });
   const [displayLocations, setDisplayLocations] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [editLocation, setEditLocation] = useState({ _id: '', label: '', icon: '' });
-
+  const [loading,setLoading]=useState(true);
   const handleAddLocation = async () => {
     try {
       const { data } = await axios.post('http://localhost:4000/api/v1/admin/location', locationForm,{withCredentials:true});
-      console.log(data);
       toast.success(data.message);
       fetchLocations();
       setLocationForm({ label: '', icon: '' });
     } catch (error) {
       toast.error("Something went wrong! Try again");
-      console.log(error);
     }
   };
 
   const fetchLocations = async () => {
     try {
       const { data } = await axios.get('http://localhost:4000/api/v1/location');
-      console.log(data);
       setDisplayLocations(data.allLocations);
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -72,16 +72,17 @@ const Location = () => {
   useEffect(() => {
     fetchLocations();
   }, []);
-
+ if(loading) return <Loader/>
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center" marginTop={2}>
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Location Form
-              </Typography>
+            <Grid item xs={12} mt={4} mb={2}>
+                <Typography variant='h4' textAlign={'center'} mt={1}>Add location</Typography>
+                <Divider/>
+            </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField

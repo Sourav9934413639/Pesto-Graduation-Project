@@ -18,23 +18,13 @@ import {
 
 import { Context } from '../index';
 import toast from 'react-hot-toast';
-import HouseHoldImage from '../Images/RegistrationImg.png';
 
 const RegistrationForm = () => {
     const {isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUserRole}=useContext(Context);
-    const [hover, setOnhover] = useState(false);
-    const hoverEffect = () => {
-      setOnhover(true);
-    };
-  
-    const discardHoverEffect = () => {
-      setOnhover(false);
-    };
-  
+    
     const textStyle = {
       fontWeight: '900',
-      color: hover ? '#f57c00' : '#ffa726',
-      transition: 'all 0.5s ease-in-out',
+      color:'#f57c00'
     };
     const [form, setForm] = useState({
       username: '',
@@ -106,8 +96,8 @@ const RegistrationForm = () => {
           {/* Left Section (60%) */}
           <Grid item xs={8}>
             <img
-              src={HouseHoldImage}
-              alt="House hold"
+              src={`/Authentication/Register.jpg`}
+              alt="Register Pic"
               style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '2px' }}
             />
           </Grid>
@@ -199,8 +189,7 @@ const RegistrationForm = () => {
                   Already have an account?{' '}
                   <Link to={'/login'} 
                   style={textStyle}
-                  onMouseOver={hoverEffect}
-                   onMouseOut={discardHoverEffect}>
+                  >
                     LogIn
                   </Link>
                 </Typography>

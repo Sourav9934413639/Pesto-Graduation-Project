@@ -34,6 +34,7 @@ import AllServices from './Admin/AllServices';
 import Location from './Admin/Location';
 import UserDetails from './Admin/UserDetails';
 import BasicServiceDetails from './Admin/BasicServiceDetails';
+import MessageDetail from './Admin/MessageDetail';
 
 const AdminRoute = ({ element }) => {
   const { isAuthenticated, userRole } = useContext(Context);
@@ -92,7 +93,7 @@ function App() {
           <Route path="/service/:title" element={<ServicesDescription />}/>
           <Route path='/CitySelection'  element={<CitySelection />}/>
           <Route path='/ServiceSelection' element={<ServiceSelection />}/>
-          <Route path='/DetailsRegBooking' element= {<DetailsRegardingBooking/>}/>
+          <Route path='/DetailsRegardingBooking' element= {<DetailsRegardingBooking/>}/>
           <Route path='/summary' element= {<SummaryPage/>} ></Route>
           <Route
             path="/Admin/*"
@@ -131,10 +132,15 @@ function App() {
                         element={<Location />}
                       />
                       <Route
-                        path="/user-details/:userId"
+                        path="/user-details/user/:userId"
                         element={<UserDetails />}
                       />
                       <Route path="/serviceDetails/basicService/:id" element={<BasicServiceDetails />} />
+                      <Route
+                        path="/user-details/user/:userId"
+                        element={<UserDetails />}
+                      />
+                      <Route path="/user-details/user/:userId/message/:messageId" element={<MessageDetail />} />
                     </Routes>
                     
 

@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Container, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Card, Grid, MenuItem, Select } from '@mui/material';
+import { Button, Container, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Card, Grid, MenuItem, Select, Typography, Divider } from '@mui/material';
 
 import ServiceGrid from './ServiceGrid';
 import toast from 'react-hot-toast';
+import Loader from '../Components/Loader';
 
 const ServicesAdmin = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const ServicesAdmin = () => {
   const [displayServices, setDisplayServices] = useState([]);
   const [displayTitles, setDisplayTitles] = useState([]);
   const [fetchTitle, setFetchTitle] = useState('');
-  
+  const [loading,setLoading]=useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [editService, setEditService] = useState({ _id: '', imgName: '', description: '', heading: '' });
 
@@ -46,10 +47,11 @@ const ServicesAdmin = () => {
   const fetchServices = async () => {
     try {
       const { data} = await axios.get('http://localhost:4000/api/v1/service');
-      console.log(data);
        setDisplayServices(data.allService);
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false);
     }
   };
   const handleSelectChange = (event) => {
@@ -92,11 +94,15 @@ const ServicesAdmin = () => {
     fetchTitles();
     fetchServices();
   }, []);
-
+  if(loading) return <Loader/>
   return (
     <>
     <Container maxWidth="sm" margin="2">
       <Card style={{ padding: '2rem', margin: '2rem', textAlign: 'center' }}>
+      <Grid item xs={12} mt={4} mb={2}>
+          <Typography variant='h4' textAlign={'center'} mt={1}>Add service</Typography>
+          <Divider/>
+        </Grid>
       <Grid item xs={6}>
                   <Select
                     labelId="title-label"
@@ -147,7 +153,10 @@ const ServicesAdmin = () => {
           Save Data
         </Button>
       </Card>
-   
+      <Grid item xs={6} mt={4}>
+          <Typography variant='h4' textAlign={'center'}>All Services</Typography>
+      </Grid>
+      <Divider height='20px'></Divider>
       <Dialog open={openModal} onClose={handleCloseEditModal}>
         <DialogTitle>Edit Service</DialogTitle>
         <DialogContent>

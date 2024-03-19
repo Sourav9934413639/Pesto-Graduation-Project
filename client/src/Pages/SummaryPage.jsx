@@ -1,6 +1,6 @@
 
 import { Box, Button, Container, CssBaseline, Divider, Stack, Typography } from '@mui/material';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import checkoutHandler from '../Components/Checkout';
 import axios from 'axios';
@@ -8,13 +8,14 @@ import toast from 'react-hot-toast';
 
 import { Context } from '../index';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../Components/Loader';
 
 
 
 const SummaryPage = () => {
-  const summary = useSelector(state => state.serviceReducer);
+ const summary = useSelector(state => state.serviceReducer);
   const navigate = useNavigate();
-  const {isAuthenticated,loading,setLoading}=useContext(Context);
+  const {isAuthenticated,loading,setLoading,orderId,setOrderId}=useContext(Context);
   const handleCheckout = async() => {
     try {
       if (!isAuthenticated) {
@@ -23,9 +24,27 @@ const SummaryPage = () => {
         return;
       }
       setLoading(true);
-      const {data}=await axios.post("http://localhost:4000/api/v1/services",summary,{withCredentials:true})
-      console.log(data)
-      toast.success(data.message);
+      const {data}=await axios.post("http://localhost:4000/api/v1/user/purchase/order",
+        {
+          Title:summary.Title,
+          Location:summary.Location,
+          Gender:summary.Gender,
+          TotalPrice:2350,
+          ServiceDescription:summary.obj,
+          BasicPay:summary.basicPay,
+          AddOns:summary.addOns
+          
+      }
+      ,{withCredentials:true})
+      if (data && data.success) {
+        const latestOrder = data.orderArr[data.orderArr.length - 1]; 
+        if (latestOrder && latestOrder._id) {
+          setOrderId(latestOrder._id);
+          console.log("Latest OrderId after setting:", latestOrder._id);
+          toast.success(data.message);
+          checkoutHandler(summary.TotalPrice);
+        } 
+      }
       checkoutHandler(summary.TotalPrice);
     } catch (error) {
       console.log(error);
@@ -33,10 +52,13 @@ const SummaryPage = () => {
     }finally{
       setLoading(false)
     }
+  }
     
-    
-  };
-
+  
+  useEffect(() => {
+    console.log('orderId:', orderId);
+  }, [orderId]);
+  if(loading) return <Loader/>
   return (
     <Container maxWidth="md" style={{ marginTop: '50px' }}>
       <CssBaseline />
@@ -90,5 +112,4 @@ const SummaryPage = () => {
     </Container>
   );
 };
-
 export default SummaryPage;

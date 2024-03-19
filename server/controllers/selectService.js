@@ -35,6 +35,17 @@ export const showAllServices=catchAsyncErrors(async(req,res,next)=>{
     })
 })
 
+export const getServiceInfoByTitle=catchAsyncErrors(async(req,res,next)=>{
+    const {title}=req.body;
+    if(!title){
+        return next(new ErrorHandler("Service details for this title doesn't exist",400));
+    }
+    const particularServiceDetail=await SelectService.findOne({title});
+    res.status(200).json({
+        success:true,
+        particularServiceDetail
+    })
+})
 export const deleteService=catchAsyncErrors(async(req,res,next)=>{
     let service=await SelectService.findById(req.params.id);
     if (!service) {

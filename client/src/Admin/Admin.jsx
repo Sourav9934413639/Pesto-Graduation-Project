@@ -4,11 +4,13 @@ import { Typography, Container, TableContainer, Table, TableHead, TableRow, Tabl
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; 
+import Loader from '../Components/Loader';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openModal, setOpenModal] = useState(false);
+  const [loading,setLoading] = useState(true);
 
   useEffect(() => {
     fetchAllUsers();
@@ -19,7 +21,9 @@ const AdminDashboard = () => {
       const response = await axios.get('http://localhost:4000/api/v1/admin/users', { withCredentials: true });
       setUsers(response.data.users);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error(error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -50,7 +54,7 @@ const AdminDashboard = () => {
       console.error('Error updating role:', error);
     }
   };
-
+  if(loading) return <Loader/>
   return (
     <Container>
       <Grid container margin={2}>
@@ -74,6 +78,7 @@ const AdminDashboard = () => {
                       <TableCell>
                       <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: 22 }}>Actions</Typography>
                       </TableCell>
+                      
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -86,32 +91,34 @@ const AdminDashboard = () => {
                           '&:hover': {
                             backgroundColor: '#1976D2',
                             '& *': {
-                              color: 'white', // Change text color to white on hover
+                              color: 'white',
                             },
                           },
                         }}
                       >
                         <TableCell>
-                          <Link to={`/admin/user-details/${user._id}`}>
+                          <Link to={`/admin/user-details/user/${user._id}`}>
                             <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16 }}>{user.username}</Typography>
                           </Link>
                         </TableCell>
                         <TableCell>
-                          <Link to={`/admin/user-details/${user._id}`}>
+                          <Link to={`/admin/user-details/user/${user._id}`}>
                             <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16 }}>{user.email}</Typography>
                           </Link>
                         </TableCell>
                         <TableCell>
-                          <Link to={`/admin/user-details/${user._id}`}>
+                          <Link to={`/admin/user-details/user/${user._id}`}>
                             <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16 }}>{user.role}</Typography>
                           </Link>
                         </TableCell>
+                        
                         <TableCell>
                           <IconButton onClick={() => handleDeleteUser(user._id)}>
                             <DeleteIcon />
                           </IconButton>
                           <Button onClick={() => handleOpenModal(user)}>Edit Role</Button>
                         </TableCell>
+                        
                       </TableRow>
                     ))}
                   </TableBody>

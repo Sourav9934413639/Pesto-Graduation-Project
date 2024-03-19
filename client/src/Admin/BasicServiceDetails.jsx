@@ -36,7 +36,6 @@ const BasicServiceDetails = () => {
         description: '',
       });
     } catch (error) {
-      console.log(error)
       toast.error("Something went wrong! Try again");
     }
   };
@@ -84,6 +83,7 @@ console.log(title)
   useEffect(()=>{
     fetchChoosenService();
   },[fetchChoosenService])
+
   return (
     <Container sx={{ marginTop: 2 }}>
       <Typography variant="h1" gutterBottom>
@@ -105,10 +105,10 @@ console.log(title)
             
           <CardContent sx={{height:'20%'}}>
                 <Typography variant="body1" gutterBottom>
-                  <strong>Price:</strong> {serviceData.price}
+                  <strong>Price: </strong>₹{serviceData.price}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  <strong>Description:</strong> {serviceData.description}
+                  <strong>Description: </strong> {serviceData.description}
                 </Typography>
                 <Typography variant="body1">
                   <strong>Details:</strong> {serviceData.description2}
@@ -204,7 +204,7 @@ console.log(title)
       <img style={{width:'300px',height:'300px',objectFit:'cover'}} src={`/ImagesFiles/${baseServiceInfo.title}/AddOns/${addon.imgName}.jpg`} alt='Addon' />
     
     </TableCell>
-    <TableCell style={{fontSize:'25px'}}><strong>{addon.price}</strong></TableCell>
+    <TableCell style={{fontSize:'25px'}}><strong>₹{addon.price}</strong></TableCell>
     <TableCell style={{fontSize:'18px'}}>{addon.description}</TableCell>
     <TableCell>
       <IconButton onClick={() => handleEditAddon(addon)} aria-label="edit" size="small" title="Edit">

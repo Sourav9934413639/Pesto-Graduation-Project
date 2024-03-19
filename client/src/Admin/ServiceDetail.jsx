@@ -1,18 +1,19 @@
 
 
-import { Button, Card, CardContent, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Button, Card, CardContent, Divider, Grid, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import BasicServiceCards from './BasicServiceCards'
+import Loader from '../Components/Loader'
 
 const ServiceDetail = () => {
   const [formData,setFormData]=useState({header:'',imgName:'',price:'',description:'',description2:''})
   const [title,setTitle]=useState('');
   const [fetchTitles,setFetchTitles]=useState([]);
   const [allBasicServices,setAllBasicServices]=useState([]);
-
+  const [loading,setLoading]=useState(true);
   const submitBasicService=async()=>{
     try {
       const {data}=await axios.post('http://localhost:4000/api/v1/admin/selectService',{
@@ -57,6 +58,8 @@ const ServiceDetail = () => {
       setAllBasicServices(data.showAllServices);
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false);
     }
   }
   const deleteHandler=async(id)=>{
@@ -73,15 +76,20 @@ const ServiceDetail = () => {
     fetchTitlesFromDatabase();
     fetchAllBasicServices();
   },[allBasicServices.length])
+
+  if(loading) return <Loader/>
   return (
     <Container>
+
        <Grid container spacing={2}>
+       
         <Grid item xs={12}>
           <Card>
             <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Service Form
-              </Typography>
+            <Grid item xs={12} mt={4} mb={2}>
+                <Typography variant='h4' textAlign={'center'} mt={1}>Add service with description</Typography>
+                <Divider/>
+             </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <Select
@@ -174,7 +182,12 @@ const ServiceDetail = () => {
           </Card>
         </Grid>
         </Grid>
-        <Grid container spacing={10} mt={4} sx={{ justifyContent: 'center', rowGap: '20px',height:'auto' }}>
+        <Grid item xs={12} mt={4} mb={2}>
+          <Typography variant='h4' textAlign={'center'} mt={1}>All services with description</Typography>
+          <Divider/>
+        </Grid>
+        
+        <Grid container spacing={10} sx={{ justifyContent: 'center', rowGap: '20px',height:'auto' }}>
           {
             allBasicServices && allBasicServices.length !==0 &&
             allBasicServices.map((item)=>(

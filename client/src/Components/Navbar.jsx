@@ -68,7 +68,7 @@ useEffect(()=>{
 
   return (
     <>
-      <AppBar position="static" sx={{ backgroundColor: "black" }}>
+      <AppBar position="sticky" sx={{ top: 0, backgroundColor: "black", zIndex: 1201 }}>
         <Toolbar>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             HelperHub

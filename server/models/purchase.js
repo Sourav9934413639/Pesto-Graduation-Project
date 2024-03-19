@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
-const serviceSchema=new mongoose.Schema({
+const purchaseSchema=new mongoose.Schema({
     Title:{
         type:String,
         required:true
@@ -28,9 +28,13 @@ const serviceSchema=new mongoose.Schema({
         required: true
       },
     ServiceDescription:mongoose.Schema.Types.Mixed,
+    orderStatus:{
+        type:"String",
+        default:"Pending"
+    },
     createdAt: {
         type: Date,
         default: Date.now,
       }
 })
-export const Services=mongoose.model("services",serviceSchema)
+export const Purchase=mongoose.model("purchase",purchaseSchema)
