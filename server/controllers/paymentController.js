@@ -32,7 +32,8 @@ export const checkout=catchAsyncErrors(async(req,res)=>{
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
-        user:req.user
+        user:req.user,
+        
     })
     console.log(saveDetails)
     

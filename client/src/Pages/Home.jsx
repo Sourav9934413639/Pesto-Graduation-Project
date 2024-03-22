@@ -61,18 +61,6 @@ const fetchFAQs=async()=>{
     <Slider/>
     <div style={{ position: 'relative' }}>
       <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
-        
-
-        {/* <Box
-          style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            textAlign: 'left',
-            color: 'white',
-            maxWidth: '300px',
-          }}
-        > */}
           <Typography variant="h2" style={{ color: 'black', fontWeight: 'bold',textAlign:'center' }}>
             "Bringing comfort home"
           </Typography>

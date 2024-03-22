@@ -128,7 +128,7 @@ const DetailsRegardingBooking = () => {
   }
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div style={{ padding: '20px',minHeight:'64.7vh'}}>
       {getExtraDetails && renderData(getExtraDetails)}
     </div>
   );

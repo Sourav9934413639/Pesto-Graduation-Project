@@ -82,7 +82,7 @@ const AdminDashboard = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {users.map((user) => (
+                    {users && users.map((user) => (
                       <TableRow
                         key={user._id}
                         sx={{
@@ -98,17 +98,17 @@ const AdminDashboard = () => {
                       >
                         <TableCell>
                           <Link to={`/admin/user-details/user/${user._id}`}>
-                            <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16 }}>{user.username}</Typography>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16,cursor:'pointer' }}>{user.username}</Typography>
                           </Link>
                         </TableCell>
                         <TableCell>
                           <Link to={`/admin/user-details/user/${user._id}`}>
-                            <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16 }}>{user.email}</Typography>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16,cursor:'pointer' }}>{user.email}</Typography>
                           </Link>
                         </TableCell>
                         <TableCell>
                           <Link to={`/admin/user-details/user/${user._id}`}>
-                            <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16 }}>{user.role}</Typography>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: 16,cursor:'pointer' }}>{user.role}</Typography>
                           </Link>
                         </TableCell>
                         

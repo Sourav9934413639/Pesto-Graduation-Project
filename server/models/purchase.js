@@ -17,7 +17,10 @@ const purchaseSchema=new mongoose.Schema({
        type:mongoose.Schema.Types.Mixed,
        required:true
     },
-    AddOns:mongoose.Schema.Types.Mixed,
+    AddOns:{
+        type:Object,
+        default:{}
+    },
     TotalPrice:{
         type:Number,
         required:true
