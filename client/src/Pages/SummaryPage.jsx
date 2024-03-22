@@ -39,8 +39,6 @@ const SummaryPage = () => {
       ,{withCredentials:true})
       toast.success(data.message)
       localStorage.setItem('orderId', JSON.stringify(data.orderId));
-      console.log(data)
-      console.log(data.orderId)
       checkoutHandler(summary.TotalPrice);
     } catch (error) {
       console.log(error);

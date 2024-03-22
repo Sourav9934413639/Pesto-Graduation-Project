@@ -87,7 +87,6 @@ export const addAddOn=catchAsyncErrors(async(req,res,next)=>{
 })
 export const updateAddOn=catchAsyncErrors(async(req,res,next)=>{
     const {id,addOnId}=req.params;
-    console.log(id,addOnId);
     const {header, imgName, price, description}=req.body;
     let service=await SelectService.findById(id);
     if (!service) {

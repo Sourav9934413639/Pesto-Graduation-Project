@@ -1,7 +1,7 @@
 
 
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { TextField, Button, Grid, Box, Container as MuiContainer, Card, CardContent, CardActions, Typography, IconButton, Divider } from '@mui/material';
+import { TextField, Button, Grid, Box, Container as MuiContainer, Card, CardContent, Typography, Divider } from '@mui/material';
 import { Context } from '../index';
 import Loader from '../Components/Loader';
 import { Link } from 'react-router-dom';
@@ -55,7 +55,6 @@ function Profile() {
     try {
       const { data } = await axios.get(`http://localhost:4000/api/v1/user/${user._id}/purchase/order/${oId}`, { withCredentials: true });
       setNewOrder(data.order);
-      console.log(data)
     } catch (error) {
       console.log(error);
     }
@@ -71,12 +70,9 @@ function Profile() {
     return date.toLocaleTimeString('en-IN');
   };
   const fetchAllOrdersList=useCallback(async()=>{
-    console.log(userId)
     try {
       const {data}=await axios.get(`http://localhost:4000/api/v1/purchases/user/${userId}/allOrders`,{withCredentials:true});
       setOrdersList(data.purchases);
-      console.log(data);
-      console.log(ordersList)
     } catch (error) {
       console.log(error);
     }
@@ -98,8 +94,6 @@ function Profile() {
     if(userId){
     fetchAllOrdersList()
     }
-    console.log("userId:", userId);
-  console.log("ordersList:", ordersList);
   },[user._id,userId,fetchAllOrdersList])
   const handleBasicInfoChange = (event) => {
     setBasicInfo({
@@ -136,7 +130,6 @@ function Profile() {
         },
         { withCredentials: true }
       );
-      console.log('User Details Updated:', response.data);
       toast.success(response.data.message);
     } catch (error) {
       console.error('Error updating user details:', error);
@@ -147,7 +140,7 @@ function Profile() {
   const handlePasswordUpdation = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(
+      await axios.put(
         'http://localhost:4000/api/v1/password/update',
         {
           oldPassword: password.oldPassword,
@@ -156,10 +149,8 @@ function Profile() {
         },
         { withCredentials: true }
       );
-      console.log('Password Updated:', response.data);
       toast.success('Password updated successfully...');
     } catch (error) {
-      console.error('Error updating password:', error);
       toast.error('Something went wrong! Try again');
     } finally {
       setPassword({ oldPassword: '', newPassword: '', confirmPassword: '' });

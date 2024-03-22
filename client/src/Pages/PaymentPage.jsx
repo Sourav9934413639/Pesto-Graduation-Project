@@ -17,7 +17,6 @@ const PaymentPage = () => {
   const [oId,setOId]=useState('');
   const searchQuery = useSearchParams()[0];
   const refNo = searchQuery.get('reference');
-  const [orderDetails,setOrderDetails]=useState({});
   const {user}=useContext(Context);
   const pageStyle = {
     display: 'flex',
@@ -58,7 +57,7 @@ const PaymentPage = () => {
   return (
     <Container component="main" style={{minHeight:'64.7vh'}}>
       <CssBaseline />
-      <Typography variant={'h5'} color={'green'} fontWeight={'bold'} textAlign={'center'}>Congratulations! Your payment is successfully done.</Typography>
+      <Typography variant={'h5'} color={'green'} fontWeight={'bold'} textAlign={'center'} mt={4}>Congratulations! Your payment is successfully done.</Typography>
       
       <Paper elevation={3} sx={pageStyle}>
         <Typography variant="h6">PAYMENT SUCCESSFULL</Typography>
