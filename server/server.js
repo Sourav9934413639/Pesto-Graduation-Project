@@ -12,7 +12,7 @@ export const instance = new Razorpay({
     key_secret:process.env.RAZORPAY_KEY_SECRET
   });
 const server=app.listen(process.env.PORT||4001,()=>{
-    console.log(`Server listening to port number- ${process.env.PORT}`);
+    console.log(`Server listening to port number- ${process.env.PORT} in ${process.env.NODE_ENV} mode`);
 })
 process.on("unhandledRejection", (err) => {
     console.log(`Error: ${err.message}`);
