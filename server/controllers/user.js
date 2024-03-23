@@ -45,11 +45,14 @@ export const login=catchAsyncErrors(async(req,res,next)=>{
 export const logout=catchAsyncErrors((req,res,next)=>{
     const options={
         expires:new Date(Date.now()),
-        httpOnly:true
+        httpOnly:true,
+        sameSite:process.env.NODE_ENV==="Development"?"lax":"none",
+        secure:process.env.NODE_ENV==="Development"?false:true,
     }
     res.status(200).cookie("token",null,options).json({
         success:true,
-        message:"Logged Out"
+        message:"Logged out successfully..."
+
     })
 })
 export const forgotPassword=async(req,res,next)=>{
