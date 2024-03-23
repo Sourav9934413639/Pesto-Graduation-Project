@@ -12,7 +12,9 @@ import allServicesRoutes from './routes/allServicesRoutes.js';
 import selectServiceRoutes from './routes/selectServiceRoutes.js';
 import additionalDetailsRoutes from './routes/additionalDetailsRoutes.js';
 import particularServiceRoutes from './routes/particularServiceRoutes.js';
-import locationRoutes from './routes/locationRoutes.js'
+import locationRoutes from './routes/locationRoutes.js';
+
+
 
 config({path:"./configuration/config.env"});
 export const app=express();
@@ -33,8 +35,6 @@ app.use('/api/v1',selectServiceRoutes);
 app.use('/api/v1',additionalDetailsRoutes);
 app.use('/api/v1',particularServiceRoutes);
 app.use('/api/v1',locationRoutes);
-
-
 
 app.get("/getKey",(req,res)=>{
     res.status(200).json({

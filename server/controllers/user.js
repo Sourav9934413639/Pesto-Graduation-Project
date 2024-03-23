@@ -55,10 +55,8 @@ export const logout=catchAsyncErrors((req,res,next)=>{
 export const forgotPassword=async(req,res,next)=>{
 
     const {email}=req.body;
-    const user=await User.findOne({email});
-    console.log(user)
-    
-    if(!user) {
+    const user=await User.findOne({email}); 
+   if(!user) {
         return next(new ErrorHandler("User not found",404));
     }
     const newPasswordToken=user.getResetPasswordToken();
@@ -84,9 +82,6 @@ export const resetNewPassword=async(req,res,next)=>{
     
         const { newPassword, confirmPassword } = req.body;
         const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
-    
-        console.log(req.params.token, newPassword, confirmPassword);
-    
         const user = await User.findOne({
           resetPasswordToken,
           resetPasswordExpire: { $gt: Date.now() },
@@ -164,7 +159,6 @@ export const getAllUsers=catchAsyncErrors(async(req,res)=>{
 })
 export const getSingleUser=catchAsyncErrors(async(req,res)=>{
     const user = await User.findById(req.params.id);
-    console.log(req.params.id)
     if (!user) {
     return next(
       new ErrorHandler(`User does not exist with Id: ${req.params.id}`,404)

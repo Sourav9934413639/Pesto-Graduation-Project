@@ -10,7 +10,6 @@ export const checkout=catchAsyncErrors(async(req,res)=>{
           currency:"INR",
         };
        const order= await instance.orders.create(options);
-       console.log(order);
        res.status(200).json({
           success:true,
           order
@@ -32,10 +31,9 @@ export const checkout=catchAsyncErrors(async(req,res)=>{
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
-        user:req.user
+        user:req.user,
+        
     })
-    console.log(saveDetails)
-    
     res.redirect(`http://localhost:3000/PaymentSuccess?reference=${razorpay_payment_id}`)
   }
   else{
