@@ -34,7 +34,7 @@ const SignInForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post('http://localhost:4000/api/v1/login', form,
+      await axios.post('http://localhost:4000/api/v1/login', form,
       {
         headers: {
           "Content-Type": "application/json",
