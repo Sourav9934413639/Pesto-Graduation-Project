@@ -41,7 +41,6 @@ const SignInForm = () => {
         },
         withCredentials: true,
       });
-      console.log(data);
       toast.success("Logged in successfully...");
       setIsAuthenticated(true);
       setLoading(false);
@@ -89,7 +88,7 @@ const SignInForm = () => {
     return <Navigate to={"/"} />
   }
   return (
-    <Container component="main" maxWidth="lg" sx={{ width: '80%' }}>
+    <Container component="main" maxWidth="lg" sx={{ width: '80%',minHeight:'52vh' }}>
       <Box
         sx={{
           display: 'flex',
@@ -100,6 +99,7 @@ const SignInForm = () => {
           borderRadius: '2px',
           margin: '1rem',
           padding: '1rem',
+          marginTop:'6rem'
         }}
       >
         <Grid container spacing={2}>
