@@ -34,14 +34,13 @@ const SignInForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post('http://localhost:4000/api/v1/login', form,
+      await axios.post('http://localhost:4000/api/v1/login', form,
       {
         headers: {
           "Content-Type": "application/json",
         },
         withCredentials: true,
       });
-      console.log(data);
       toast.success("Logged in successfully...");
       setIsAuthenticated(true);
       setLoading(false);
@@ -89,7 +88,7 @@ const SignInForm = () => {
     return <Navigate to={"/"} />
   }
   return (
-    <Container component="main" maxWidth="lg" sx={{ width: '80%' }}>
+    <Container component="main" maxWidth="lg" sx={{ width: '80%',minHeight:'52vh' }}>
       <Box
         sx={{
           display: 'flex',
@@ -100,6 +99,7 @@ const SignInForm = () => {
           borderRadius: '2px',
           margin: '1rem',
           padding: '1rem',
+          marginTop:'6rem'
         }}
       >
         <Grid container spacing={2}>
