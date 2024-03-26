@@ -7,6 +7,7 @@ import AdditionalDetailsCard from './AdditionalDetailsCard';
 import toast from 'react-hot-toast';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Loader from '../Components/Loader';
+import { BASE_URL } from '../Constants';
 
 const AdditionalInfo = () => {
   const [title, setTitle] = useState('');
@@ -21,7 +22,7 @@ const AdditionalInfo = () => {
   
   const fetchTitlesFromDatabase = async () => {
     try {
-      const { data } = await axios.get('http://localhost:4000/api/v1/allServices');
+      const { data } = await axios.get(`${BASE_URL}/api/v1/allServices`);
       setFetchTitles(data.allServices);
     } catch (error) {
       console.error('Error fetching titles:', error.message);
@@ -53,7 +54,7 @@ const AdditionalInfo = () => {
 
   const addAdditionalDetails = async () => {
     try {
-        const {data}=await axios.post('http://localhost:4000/api/v1/admin/additionalDetails', {
+        const {data}=await axios.post(`${BASE_URL}/api/v1/admin/additionalDetails`, {
         title,
         subsections
       },
@@ -70,7 +71,7 @@ const AdditionalInfo = () => {
 
   const fetchAllAdditionalDetails = async () => {
     try {
-      const { data } = await axios.get('http://localhost:4000/api/v1/additionalDetails');
+      const { data } = await axios.get(`${BASE_URL}/api/v1/additionalDetails`);
       setGetAllAdditionalDetails(data.allAdditionalInfo);
     } catch (error) {
       console.log(error)

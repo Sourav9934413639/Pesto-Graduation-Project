@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { BASE_URL } from '../../Constants';
 
 const CitySelection = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const CitySelection = () => {
  },[])
  const fetchAllLocations=async()=>{
   try {
-    const {data:{allLocations}}=await axios.get("http://localhost:4000/api/v1/location");
+    const {data:{allLocations}}=await axios.get(`${BASE_URL}/api/v1/location`);
     setCities(allLocations);
   } catch (error) {
     console.log(error.response);

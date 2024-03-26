@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { BASE_URL } from '../../Constants';
 
 
 const ServicesCard = ({ title, imgName }) => {
@@ -76,7 +77,7 @@ const ServicesPage = () => {
   },[])
   const fetchAllServices=async()=>{
     try {
-      const {data:{allServices}}=await axios.get("http://localhost:4000/api/v1/allServices");
+      const {data:{allServices}}=await axios.get(`${BASE_URL}/api/v1/allServices`);
       setServicesData(allServices)
     } catch (error) {
       console.log(error)

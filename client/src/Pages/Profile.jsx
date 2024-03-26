@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearPaymentInfo, setPaymentInfo } from '../Redux/paymentReducer';
 import { Stack } from '@mui/system';
+import { BASE_URL } from '../Constants';
 
 
 function Profile() {
@@ -43,7 +44,7 @@ function Profile() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/userDetails', { withCredentials: true });
+      const response = await axios.get(`${BASE_URL}/api/v1/userDetails`, { withCredentials: true });
       const { username, email, mobileNumber, dob, gender } = response.data.user;
       setBasicInfo({ username, email, mobileNumber, dob, gender });
     } catch (error) {
@@ -53,7 +54,7 @@ function Profile() {
 
   const getNewOrderDetails = useCallback(async () => {
     try {
-      const { data } = await axios.get(`http://localhost:4000/api/v1/user/${user._id}/purchase/order/${oId}`, { withCredentials: true });
+      const { data } = await axios.get(`${BASE_URL}/api/v1/user/${user._id}/purchase/order/${oId}`, { withCredentials: true });
       setNewOrder(data.order);
     } catch (error) {
       console.log(error);
@@ -71,7 +72,7 @@ function Profile() {
   };
   const fetchAllOrdersList=useCallback(async()=>{
     try {
-      const {data}=await axios.get(`http://localhost:4000/api/v1/purchases/user/${userId}/allOrders`,{withCredentials:true});
+      const {data}=await axios.get(`${BASE_URL}/api/v1/purchases/user/${userId}/allOrders`,{withCredentials:true});
       setOrdersList(data.purchases);
     } catch (error) {
       console.log(error);
@@ -120,7 +121,7 @@ function Profile() {
     event.preventDefault();
     try {
       const response = await axios.put(
-        'http://localhost:4000/api/v1/me/update',
+        `${BASE_URL}/api/v1/me/update`,
         {
           username: basicInfo.username,
           email: basicInfo.email,
@@ -141,7 +142,7 @@ function Profile() {
     event.preventDefault();
     try {
       await axios.put(
-        'http://localhost:4000/api/v1/password/update',
+        `${BASE_URL}/api/v1/password/update`,
         {
           oldPassword: password.oldPassword,
           newPassword: password.newPassword,

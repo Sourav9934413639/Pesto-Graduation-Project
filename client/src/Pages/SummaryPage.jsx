@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { Context } from '../index';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../Components/Loader';
+import { BASE_URL } from '../Constants';
 
 
 
@@ -25,7 +26,7 @@ const SummaryPage = () => {
         return;
       }
       setLoading(true);
-      const {data}=await axios.post(`http://localhost:4000/api/v1/user/${userId}/purchase/order`,
+      const {data}=await axios.post(`${BASE_URL}/api/v1/user/${userId}/purchase/order`,
         {
           Title:summary.Title,
           Location:summary.Location,

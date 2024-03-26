@@ -7,6 +7,7 @@ import Loader from '../../Components/Loader';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Container } from '@mui/system';
+import { BASE_URL } from '../../Constants';
 
 const DetailsRegardingBooking = () => {
   const { Title } = useSelector(state => state.serviceReducer);
@@ -19,7 +20,7 @@ const DetailsRegardingBooking = () => {
   const navigate = useNavigate();
   const fetchAdditionalDetails = useCallback(async () => {
     try {
-      const { data } = await axios.post("http://localhost:4000/api/v1/additionalDetail/title", { title: Title });
+      const { data } = await axios.post(`${BASE_URL}/api/v1/additionalDetail/title`, { title: Title });
       setGetExtraDetails(data.particularAdditionalInfo);
     } catch (error) {
       console.log(error);

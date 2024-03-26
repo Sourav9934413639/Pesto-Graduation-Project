@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loader from '../Components/Loader';
 import { Typography, Container, Paper, FormControlLabel, Checkbox } from '@mui/material';
 import { Context } from '../index';
+import { BASE_URL } from '../Constants';
 
 const MessageDetail = () => {
   const { userId, messageId } = useParams();
@@ -34,7 +35,7 @@ const MessageDetail = () => {
 
   const fetchMessage = useCallback(async () => {
     try {
-      const { data } = await axios.get(`http://localhost:4000/api/v1/contact/user/${userId}/message/${messageId}`, { withCredentials: true });
+      const { data } = await axios.get(`${BASE_URL}/api/v1/contact/user/${userId}/message/${messageId}`, { withCredentials: true });
       setMessage(data.message);
       if(data.message.ticket.status==="Resolved"){
         setIsResolved(true)
@@ -52,7 +53,7 @@ const MessageDetail = () => {
   const updateMessageStatus = useCallback(async () => {
     try {
       await axios.put(
-        `http://localhost:4000/api/v1/contact/user/${userId}/message/${messageId}`,
+        `${BASE_URL}/api/v1/contact/user/${userId}/message/${messageId}`,
         { status: isResolved ? 'Resolved' : 'Pending', adminName: isResolved ? name : 'None' },
         { withCredentials: true }
       );

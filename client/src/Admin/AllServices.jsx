@@ -8,6 +8,7 @@ import Loader from '../Components/Loader';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../Constants';
 
 const AllServices = () => {
   const [servicesData, setServicesData] = useState({ title: '', imgName: '' });
@@ -23,7 +24,7 @@ const AllServices = () => {
   const fetchAllServices = async () => {
     setLoading(true);
     try {
-      const {data} = await axios.get('http://localhost:4000/api/v1/allServices');
+      const {data} = await axios.get(`${BASE_URL}/api/v1/allServices`);
       setServices(data.allServices);
     } catch (error) {
        console.log(error.response);
@@ -35,7 +36,7 @@ const AllServices = () => {
   const handleServiceForm = async (e) => {
     e.preventDefault();
     try {
-      const {data}=await axios.post('http://localhost:4000/api/v1/admin/allServices/add', servicesData,{withCredentials:true});
+      const {data}=await axios.post(`${BASE_URL}/api/v1/admin/allServices/add`, servicesData,{withCredentials:true});
       fetchAllServices();
       toast.success(data.message)
       setServicesData({ title: '', imgName: '' });
@@ -46,7 +47,7 @@ const AllServices = () => {
 
   const handleUpdateService = async (id, updatedData) => {
     try {
-      const {data}=await axios.put(`http://localhost:4000/api/v1/admin/allServices/service/${id}`, updatedData,{withCredentials:true});
+      const {data}=await axios.put(`${BASE_URL}/api/v1/admin/allServices/service/${id}`, updatedData,{withCredentials:true});
       fetchAllServices();
       toast.success(data.message);
     } catch (error) {
@@ -56,7 +57,7 @@ const AllServices = () => {
 
   const handleDeleteService = async (id) => {
     try {
-      const {data}=await axios.delete(`http://localhost:4000/api/v1/admin/allServices/service/${id}`,{withCredentials:true});
+      const {data}=await axios.delete(`${BASE_URL}/api/v1/admin/allServices/service/${id}`,{withCredentials:true});
       fetchAllServices();
       toast.success(data.message)
     } catch (error) {
