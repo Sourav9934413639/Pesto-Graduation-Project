@@ -20,7 +20,7 @@ config({path:"./configuration/config.env"});
 export const app=express();
 
 app.use(cors({
-    origin:'http://localhost:3000',
+    origin:process.env.BASE_URL,
     credentials:true,
 }));
 app.use(cookieParser());
