@@ -49,20 +49,19 @@ const RegistrationForm = () => {
       e.preventDefault();
   
       try {
-        const { data } = await axios.post('http://localhost:4000/api/v1/register', form,
+        await axios.post('http://localhost:4000/api/v1/register', form,
         {
           headers: {
             "Content-Type": "application/json",
           },
           withCredentials: true,
         });
-        console.log(data);
         toast.success("You have registered successfully...");
         setIsAuthenticated(true);
         setLoading(false);
       } catch (error) {
         console.error(error);
-        toast.error(error.response.data.message);
+        toast.error("Something went wrong! Registration failed. Try again");
         setIsAuthenticated(false);
         setLoading(false);
   
@@ -70,7 +69,7 @@ const RegistrationForm = () => {
     };
   
     if(isAuthenticated) {
-      if(user.role === "admin"){
+      if(user?.role === "admin"){
         setUserRole("ADMIN");
       }else{
         setUserRole("USER");
@@ -93,7 +92,6 @@ const RegistrationForm = () => {
         }}
       >
         <Grid container spacing={2}>
-          {/* Left Section (60%) */}
           <Grid item xs={8}>
             <img
               src={`/Authentication/Register.jpg`}
@@ -101,8 +99,6 @@ const RegistrationForm = () => {
               style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '2px' }}
             />
           </Grid>
-          
-          {/* Right Section (40%) */}
           <Grid item xs={4}>
             <Box sx={{ p: 2, width: '100%', display: 'flex', flexDirection: 'column' }}>
               <Typography component="h1" variant="h5" fontWeight={"bold"} sx={{ marginBottom: 2 }}>

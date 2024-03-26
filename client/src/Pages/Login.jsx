@@ -27,8 +27,7 @@ const SignInForm = () => {
       ...prevForm,
       [name]: value,
     }));
-  };
-  const [hover,setOnhover]=useState(false);
+  }
 
   const handleLogin = async(e) => {
     e.preventDefault();
@@ -51,7 +50,7 @@ const SignInForm = () => {
       }
     } catch (error) {
       console.log(error)
-      toast.error(error.response.data.message);
+      toast.error("Something went wrong! Login failed. Try again");
       setIsAuthenticated(false);
       setLoading(false);
     }
@@ -67,20 +66,12 @@ const SignInForm = () => {
       toast.error(error.response.data.message);
     }
   };
-
-  const hoverEffect=()=>{
-    setOnhover(true);
-  }
-  const discardHoverEffect=()=>{
-    setOnhover(false);
-  }
   const textStyle={
     fontWeight:'900',
-    color:hover?'#f57c00':'#ffa726',
-    transition:'all 0.5s ease-in-out'
+    color:'#f57c00'
   }
   if(isAuthenticated) {
-    if(user.role === "admin"){
+    if(user?.role === "admin"){
       setUserRole("ADMIN");
     }else{
       setUserRole("USER");
@@ -151,7 +142,7 @@ const SignInForm = () => {
               </form>
               <Typography variant="body2" align="center" margin={1}>
                 Don't have an account?{' '}
-                <Link to={'/register'} style={textStyle} onMouseOver={hoverEffect} onMouseOut={discardHoverEffect}>
+                <Link to={'/register'} style={textStyle}>
                   Sign Up
                 </Link>
               </Typography>

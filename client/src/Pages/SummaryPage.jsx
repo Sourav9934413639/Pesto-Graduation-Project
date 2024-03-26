@@ -85,19 +85,19 @@ const SummaryPage = () => {
         <Divider />
       </Box>
 
-      <Box mt={4}>
+      {summary.obj && (<Box mt={4}>
         <Box textAlign="center">
           <Typography variant="h5">Additional Options</Typography>
         </Box>
         <Box>
-          {Object.keys(summary.obj).map((key) => (
+          {summary.obj && Object.keys(summary.obj).map((key) => (
             <Stack key={key} direction="row" justifyContent="center" alignItems="center" mt={2}>
               <Typography variant="body1" fontWeight="bold" mr={1}>{key}:</Typography>
               <Typography variant="body1">{summary.obj[key]}</Typography>
             </Stack>
           ))}
         </Box>
-      </Box>
+      </Box>)}
       <Box m={4} textAlign="center">
         <Button variant="contained" color="primary" onClick={handleCheckout} disabled={loading}>
           Proceed to Checkout
