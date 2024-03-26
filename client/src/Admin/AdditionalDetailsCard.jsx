@@ -62,7 +62,16 @@ const AdditionalDetailsCard = ({ details,fetchAllAdditionalDetails,enteredTitle}
       toast.error('Something went wrong! Try again.');
     }
   };
-  
+  const handleDeleteDetails = async () => {
+    try {
+      const { data } = await axios.delete(`http://localhost:4000/api/v1/admin/additionalDetails/${details._id}`,
+        { withCredentials: true });
+      toast.success(data.message);
+      fetchAllAdditionalDetails();
+    } catch (error) {
+      toast.error('Something went wrong! Try again.');
+    }
+  };
   return (
     <Grid item xs={12} style={{ height: '100%' }}>
       <Card
@@ -104,6 +113,7 @@ const AdditionalDetailsCard = ({ details,fetchAllAdditionalDetails,enteredTitle}
               </div>
             ))}
         </CardContent>
+        <Button variant="contained" color="primary" onClick={handleDeleteDetails} style={{margin:'0 0 1rem 1rem'}} >Delete</Button>
       </Card>
       <Modal
         open={openModal}

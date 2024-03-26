@@ -1,11 +1,12 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { Typography, Button } from '@mui/material';
+import { Typography, Button, Grid } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Container } from '@mui/system';
 
 const DetailsRegardingBooking = () => {
   const { Title } = useSelector(state => state.serviceReducer);
@@ -48,7 +49,10 @@ const DetailsRegardingBooking = () => {
     dispatch({ type: "addOtherServiceOptions", payload: singleObject });
     navigate("/summary");
   };
+  const handleSubmitWithoutDetails=()=>{
+    navigate("/summary");
 
+  }
   const handleOptionClick = (heading, label) => {
     const isAlreadySelected = serviceOptions.some(option => Object.keys(option)[0] === heading);
     let updatedOptions;
@@ -72,7 +76,7 @@ const DetailsRegardingBooking = () => {
     }
 
     const noOfQueries = section?.subsections.length;
-
+  
     return (
       <div key={section.title}>
         <Typography variant="h6" gutterBottom fontWeight="bold" fontFamily='Roboto'>
@@ -128,8 +132,23 @@ const DetailsRegardingBooking = () => {
   }
 
   return (
-    <div style={{ padding: '20px',minHeight:'64.7vh'}}>
-      {getExtraDetails && renderData(getExtraDetails)}
+    <div style={{ display:'flex', padding: '20px',minHeight:'64.7vh',alignItems:'center'}}>
+      {getExtraDetails ? renderData(getExtraDetails) : (
+        <Container>
+          <Grid container justifyContent="center" alignItems="center" spacing={2} direction="column">
+            <Grid item>
+              <Typography variant="h5" align="center">
+                We don't need any details from your side regarding this service. Just click the 'Proceed' button below to move further.
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color="primary" onClick={handleSubmitWithoutDetails}>
+                Proceed
+              </Button>
+            </Grid>
+          </Grid>
+        </Container>
+      )}
     </div>
   );
 };

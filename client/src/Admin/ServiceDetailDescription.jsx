@@ -53,12 +53,12 @@ const AdditionalInfo = () => {
 
   const addAdditionalDetails = async () => {
     try {
-         await axios.post('http://localhost:4000/api/v1/admin/additionalDetails', {
+        const {data}=await axios.post('http://localhost:4000/api/v1/admin/additionalDetails', {
         title,
         subsections
       },
       {withCredentials:true});
-      toast.success("Additional details added successfully...");
+      toast.success(data.message);
       fetchAllAdditionalDetails();
       setEnteredTitle(title); 
     
@@ -209,7 +209,7 @@ const AdditionalInfo = () => {
                     onClick={addAdditionalDetails}
                     style={{ marginTop: '1rem' }}
                   >
-                    Save
+                    Save details
                   </Button>
                 </Grid>
             </CardContent>

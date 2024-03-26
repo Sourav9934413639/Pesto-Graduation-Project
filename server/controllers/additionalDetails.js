@@ -16,7 +16,7 @@ export const saveAdditionalInfo = catchAsyncErrors(async (req, res, next) => {
   
       return res.status(201).json({
         success: true,
-        message:'Additional details is saved',
+        message:'Additional details is saved successfully...',
         allAdditionalDetails: [additionalInfo],
       });
     }

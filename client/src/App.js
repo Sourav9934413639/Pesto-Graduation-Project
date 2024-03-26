@@ -63,7 +63,7 @@ function App() {
     axios.get('http://localhost:4000/api/v1/userDetails',{withCredentials:true}).then(res=>{
       setUser(res.data.user);
       setIsAuthenticated(true);
-      if(user.role === "admin"){
+      if(user?.role === "admin"){
         setUserRole("ADMIN");
       }else{
         setUserRole("USER");
@@ -77,7 +77,7 @@ function App() {
     setLoading(false);
   })
     
-  },[isAuthenticated,setIsAuthenticated,setLoading,setUser,setUserRole,user.role])
+  },[isAuthenticated,setIsAuthenticated,setLoading,setUser,setUserRole,user?.role])
   return (
     <div className="App">
       <BrowserRouter>
