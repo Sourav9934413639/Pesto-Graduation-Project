@@ -8,6 +8,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { Context } from '../index';
 import axios from 'axios'
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../Constants';
 const ResetPassword = () => {
   const {token}=useParams();
   const [newPassword,setNewPassword]=useState('');
@@ -20,7 +21,7 @@ const ResetPassword = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.put(`http://localhost:4000/api/v1/password/reset/${token}`,
+      const { data } = await axios.put(`${BASE_URL}/api/v1/password/reset/${token}`,
       {
         newPassword,
         confirmPassword

@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import toast from 'react-hot-toast';
 import Loader from '../Components/Loader';
+import { BASE_URL } from '../Constants';
 
 const Location = () => {
   const [locationForm, setLocationForm] = useState({ label: '', icon: '' });
@@ -14,7 +15,7 @@ const Location = () => {
   const [loading,setLoading]=useState(true);
   const handleAddLocation = async () => {
     try {
-      const { data } = await axios.post('http://localhost:4000/api/v1/admin/location', locationForm,{withCredentials:true});
+      const { data } = await axios.post(`${BASE_URL}/api/v1/admin/location`, locationForm,{withCredentials:true});
       toast.success(data.message);
       fetchLocations();
       setLocationForm({ label: '', icon: '' });
@@ -25,7 +26,7 @@ const Location = () => {
 
   const fetchLocations = async () => {
     try {
-      const { data } = await axios.get('http://localhost:4000/api/v1/location');
+      const { data } = await axios.get(`${BASE_URL}/api/v1/location`);
       setDisplayLocations(data.allLocations);
     } catch (error) {
       console.log(error.response);
@@ -36,7 +37,7 @@ const Location = () => {
 
   const handleDeleteLocation = async (locationId) => {
     try {
-      const { data } = await axios.delete(`http://localhost:4000/api/v1/admin/location/${locationId}`,{withCredentials:true});
+      const { data } = await axios.delete(`${BASE_URL}/api/v1/admin/location/${locationId}`,{withCredentials:true});
       console.log(data);
       toast.success("Location deleted successfully...");
       fetchLocations();
@@ -57,7 +58,7 @@ const Location = () => {
 
   const handleSaveEditLocation = async () => {
     try {
-      const { data } = await axios.put(`http://localhost:4000/api/v1/admin/location/${editLocation._id}`, editLocation,{withCredentials:true});
+      const { data } = await axios.put(`${BASE_URL}/api/v1/admin/location/${editLocation._id}`, editLocation,{withCredentials:true});
       console.log(data);
       toast.success(data.message);
     } catch (error) {

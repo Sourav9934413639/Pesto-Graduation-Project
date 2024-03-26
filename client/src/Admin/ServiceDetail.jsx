@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import BasicServiceCards from './BasicServiceCards'
 import Loader from '../Components/Loader'
+import { BASE_URL } from '../Constants'
 
 const ServiceDetail = () => {
   const [formData,setFormData]=useState({header:'',imgName:'',price:'',description:'',description2:''})
@@ -16,7 +17,7 @@ const ServiceDetail = () => {
   const [loading,setLoading]=useState(true);
   const submitBasicService=async()=>{
     try {
-      const {data}=await axios.post('http://localhost:4000/api/v1/admin/selectService',{
+      const {data}=await axios.post(`${BASE_URL}/api/v1/admin/selectService`,{
         title: title,
         servicesInfo:{
           serviceData:formData
@@ -46,7 +47,7 @@ const ServiceDetail = () => {
   }
   const fetchTitlesFromDatabase=async()=>{
     try {
-      const { data } = await axios.get('http://localhost:4000/api/v1/allServices');
+      const { data } = await axios.get(`${BASE_URL}/api/v1/allServices`);
       setFetchTitles(data.allServices);
     } catch (error) {
       console.error('Error fetching titles:', error.message);
@@ -54,7 +55,7 @@ const ServiceDetail = () => {
   }
   const fetchAllBasicServices=async()=>{
     try {
-      const {data}=await axios.get('http://localhost:4000/api/v1/selectService');
+      const {data}=await axios.get(`${BASE_URL}/api/v1/selectService`);
       setAllBasicServices(data.showAllServices);
     } catch (error) {
       console.log(error);
@@ -64,7 +65,7 @@ const ServiceDetail = () => {
   }
   const deleteHandler=async(id)=>{
     try {
-        const {data}=await axios.delete(`http://localhost:4000/api/v1/admin/selectService/${id}`,{withCredentials:true});
+        const {data}=await axios.delete(`${BASE_URL}/api/v1/admin/selectService/${id}`,{withCredentials:true});
         toast.success(data.message);
         fetchAllBasicServices()
       }

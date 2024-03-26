@@ -14,7 +14,7 @@ import {
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import axios from 'axios';
 import Slider from '../Components/Carousel/HomeCarousel'
-
+import { BASE_URL } from '../Constants';
 
 
 const Home = () => {
@@ -24,7 +24,7 @@ const Home = () => {
   
   const fetchTitlesFromDatabase=async()=>{
     try {
-      const { data } = await axios.get('http://localhost:4000/api/v1/allServices');
+      const { data } = await axios.get(`${BASE_URL}/api/v1/allServices`);
       setFetchTitles(data.allServices);
     } catch (error) {
       console.error('Error fetching titles:', error.message);

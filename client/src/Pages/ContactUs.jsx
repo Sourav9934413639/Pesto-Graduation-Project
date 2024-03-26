@@ -15,6 +15,7 @@ import WebIcon from '@mui/icons-material/Web';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Context } from '../index'; 
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../Constants';
 
 const ContactUs = () => {
   const { loading, setLoading, user ,unseenMessage,setUnseenMessage} = useContext(Context); 
@@ -24,7 +25,7 @@ const ContactUs = () => {
     event.preventDefault();
     setLoading(true);
     try {
-      const {data} = await axios.post('http://localhost:4000/api/v1/contact',{message},{withCredentials:true});
+      const {data} = await axios.post(`${BASE_URL}/api/v1/contact`,{message},{withCredentials:true});
       toast.success(data.message)
       setMessage('');
       setUnseenMessage(unseenMessage+1);

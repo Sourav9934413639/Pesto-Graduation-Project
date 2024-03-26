@@ -13,6 +13,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Context } from '../index';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../Constants';
 const SignInForm = () => {
     const {isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUserRole}=useContext(Context);
     const navigate = useNavigate();
@@ -33,7 +34,7 @@ const SignInForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post('http://localhost:4000/api/v1/login', form,
+      await axios.post(`${BASE_URL}/api/v1/login`, form,
       {
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +60,7 @@ const SignInForm = () => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:4000/api/v1/password/forgot', { email: form.email });
+      await axios.post(`${BASE_URL}/api/v1/password/forgot`, { email: form.email });
       toast.success("The link to reset your password has been sent to your email. Please check your inbox.");
     } catch (error) {
       console.error(error);

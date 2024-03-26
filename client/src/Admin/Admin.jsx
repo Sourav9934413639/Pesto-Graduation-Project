@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import { Link } from 'react-router-dom'; 
 import Loader from '../Components/Loader';
+import { BASE_URL } from '../Constants';
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -18,7 +19,7 @@ const AdminDashboard = () => {
 
   const fetchAllUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/v1/admin/users', { withCredentials: true });
+      const response = await axios.get(`${BASE_URL}/api/v1/admin/users`, { withCredentials: true });
       setUsers(response.data.users);
     } catch (error) {
       console.error(error);
@@ -29,7 +30,7 @@ const AdminDashboard = () => {
 
   const handleDeleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/v1/admin/user/${id}`, { withCredentials: true });
+      await axios.delete(`${BASE_URL}/api/v1/admin/user/${id}`, { withCredentials: true });
       fetchAllUsers();
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -47,7 +48,7 @@ const AdminDashboard = () => {
 
   const handleUpdateRole = async (role) => {
     try {
-      await axios.put(`http://localhost:4000/api/v1/admin/user/${selectedUser._id}`, { role }, { withCredentials: true });
+      await axios.put(`${BASE_URL}/api/v1/admin/user/${selectedUser._id}`, { role }, { withCredentials: true });
       fetchAllUsers();
       handleCloseModal();
     } catch (error) {

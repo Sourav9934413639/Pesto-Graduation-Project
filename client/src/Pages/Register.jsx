@@ -18,6 +18,7 @@ import {
 
 import { Context } from '../index';
 import toast from 'react-hot-toast';
+import { BASE_URL } from '../Constants';
 
 const RegistrationForm = () => {
     const {isAuthenticated,setIsAuthenticated,loading,setLoading,user,setUserRole}=useContext(Context);
@@ -49,7 +50,7 @@ const RegistrationForm = () => {
       e.preventDefault();
   
       try {
-        await axios.post('http://localhost:4000/api/v1/register', form,
+        await axios.post(`${BASE_URL}/api/v1/register`, form,
         {
           headers: {
             "Content-Type": "application/json",

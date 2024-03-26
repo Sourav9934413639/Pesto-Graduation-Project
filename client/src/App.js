@@ -35,6 +35,7 @@ import Location from './Admin/Location';
 import UserDetails from './Admin/UserDetails';
 import BasicServiceDetails from './Admin/BasicServiceDetails';
 import MessageDetail from './Admin/MessageDetail';
+import { BASE_URL } from './Constants';
 
 const AdminRoute = ({ element }) => {
   const { isAuthenticated, userRole } = useContext(Context);
@@ -60,7 +61,7 @@ function App() {
         families: ["Poppins","Roboto", "Droid Sans", "Chilanka"]
       }
     });
-    axios.get('http://localhost:4000/api/v1/userDetails',{withCredentials:true}).then(res=>{
+    axios.get(`${BASE_URL}/api/v1/userDetails`,{withCredentials:true}).then(res=>{
       setUser(res.data.user);
       setIsAuthenticated(true);
       if(user?.role === "admin"){

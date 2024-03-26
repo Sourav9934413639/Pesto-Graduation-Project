@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { BASE_URL } from '../../Constants';
 
 function ServicesDescription() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function ServicesDescription() {
   const dispatch=useDispatch();
   const fetchParticularServiceInfo=useCallback(async()=>{
     try {
-      const {data}=await axios.post("http://localhost:4000/api/v1/service/title",{title});
+      const {data}=await axios.post(`${BASE_URL}/api/v1/service/title`,{title});
       setHelperData(data.service)
     } catch (error) {
       console.log(error)

@@ -10,6 +10,7 @@ import {
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Context } from '../index';
+import { BASE_URL } from '../Constants';
 
 
 
@@ -35,7 +36,7 @@ const PaymentPage = () => {
   };
   const saveUserPurchaseDetails = useCallback(async () => {
     try {
-      const { data } = await axios.put(`http://localhost:4000/api/v1/user/${user._id}/purchase/order/${oId}`, {}, { withCredentials: true });
+      const { data } = await axios.put(`${BASE_URL}/api/v1/user/${user._id}/purchase/order/${oId}`, {}, { withCredentials: true });
       console.log(data);
       toast.success(data.message);
     } catch (error) {

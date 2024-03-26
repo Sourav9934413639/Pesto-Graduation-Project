@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Loader from "../../Components/Loader";
+import { BASE_URL } from "../../Constants";
 
 const ServiceSelection = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const ServiceSelection = () => {
 
   const fetchServiceByTitle = useCallback(async () => {
     try {
-      const {data} = await axios.post("http://localhost:4000/api/v1/selectService/title",{title:Title});
+      const {data} = await axios.post(`${BASE_URL}/api/v1/selectService/title`,{title:Title});
       setGetDetails(data.particularServiceDetail);
     } catch (error) {
       console.log(error);

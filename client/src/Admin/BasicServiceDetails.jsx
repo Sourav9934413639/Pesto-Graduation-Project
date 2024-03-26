@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { Box } from '@mui/system';
 
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { BASE_URL } from '../Constants';
 
 const BasicServiceDetails = () => {
   const { id } = useParams();
@@ -24,7 +25,7 @@ const BasicServiceDetails = () => {
   };
   const handleAddAddon = async () => {
     try {
-      const {data} = await axios.post(`http://localhost:4000/api/v1/admin/selectService/${id}`, addonFormData,{withCredentials:true});
+      const {data} = await axios.post(`${BASE_URL}/api/v1/admin/selectService/${id}`, addonFormData,{withCredentials:true});
       const { message } =data;
       toast.success(message);
       fetchChoosenService();
@@ -50,7 +51,7 @@ console.log(title)
   }
   const handleDeleteAddon = async (addonId) => {
     try {
-      const {data}=await axios.delete(`http://localhost:4000/api/v1/admin/selectService/${id}/addOn/${addonId}`,{withCredentials:true});
+      const {data}=await axios.delete(`${BASE_URL}/api/v1/admin/selectService/${id}/addOn/${addonId}`,{withCredentials:true});
       
       toast.success(data.message)
       fetchChoosenService();
@@ -61,7 +62,7 @@ console.log(title)
   };
   const handleSaveEdit=async()=>{
     try {
-      const {data}=await axios.put(`http://localhost:4000/api/v1/admin/selectService/${id}/addOn/${editAddOn._id}`,editAddOn,{withCredentials:true})
+      const {data}=await axios.put(`${BASE_URL}/api/v1/admin/selectService/${id}/addOn/${editAddOn._id}`,editAddOn,{withCredentials:true})
       toast.success(data.message);
       fetchChoosenService();
     } catch (error) {
@@ -74,7 +75,7 @@ console.log(title)
  
   const fetchChoosenService = useCallback(async () => {
     try {
-      const { data } = await axios.get(`http://localhost:4000/api/v1/admin/selectService/${id}`, { withCredentials: true });
+      const { data } = await axios.get(`${BASE_URL}/api/v1/admin/selectService/${id}`, { withCredentials: true });
       setChoosenServiceData(data.choosedService?.servicesInfo?.addonsData);
     } catch (error) {
       console.log(error);
